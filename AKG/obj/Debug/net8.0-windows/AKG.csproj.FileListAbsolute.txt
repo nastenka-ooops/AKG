@@ -1,0 +1,17 @@
+C:\BSUIR\AKGv2\AKG\bin\Debug\net8.0-windows\AKG.exe
+C:\BSUIR\AKGv2\AKG\bin\Debug\net8.0-windows\AKG.deps.json
+C:\BSUIR\AKGv2\AKG\bin\Debug\net8.0-windows\AKG.runtimeconfig.json
+C:\BSUIR\AKGv2\AKG\bin\Debug\net8.0-windows\AKG.dll
+C:\BSUIR\AKGv2\AKG\bin\Debug\net8.0-windows\AKG.pdb
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.MainForm.resources
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.csproj.GenerateResource.cache
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.GeneratedMSBuildEditorConfig.editorconfig
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.AssemblyInfoInputs.cache
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.AssemblyInfo.cs
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.csproj.CoreCompileInputs.cache
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.sourcelink.json
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.dll
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\refint\AKG.dll
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.pdb
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.genruntimeconfig.cache
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\ref\AKG.dll
