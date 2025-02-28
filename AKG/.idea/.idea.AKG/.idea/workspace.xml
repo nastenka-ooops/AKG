@@ -8,16 +8,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd0a393e-b8c6-4340-bc02-58324722a279" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AKG.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/AKG.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drawing/BuffBitmap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/BuffBitmap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Drawing/Painter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/Painter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MainForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MainForm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Realization/Elements/Model.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Realization/Elements/Model.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Realization/MatrixTransformations.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Realization/MatrixTransformations.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Realization/ObjParaser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Realization/ObjParaser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.runtimeconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.runtimeconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/tmp.png" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/tmp.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/AKG.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AKG.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/AKG.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AKG.csproj.nuget.g.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.CoreCompileInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.GenerateResource.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.GenerateResource.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.genruntimeconfig.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.sourcelink.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/apphost.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/ref/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/ref/AKG.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/refint/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/refint/AKG.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,10 +48,31 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;nastenka-ooops&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/nastenka-ooops/AKG.git&quot;,
+    &quot;accountId&quot;: &quot;66d20223-d1fb-4ff5-8cbb-b7034013aec1&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1f2f0b08d2574f1aa35973d1cd0ae347cef920/17/9606b5a0/Control.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/211e6f3b24fa438a92f1815153647ce2c8f908/8e/00790cc9/Vector3.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2c8e7ca976f350cba9836d5565dac56b11e0b56656fa786460eb1395857a6fa/ThrowHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6ef8e7d549f6bfb5b9eafaaa0ff48d8cbfc564f32be26323b5f60e63aef4dd1/SafeFileHandle.Windows.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b7208b3f72528d22781d25fde9a55271bdf2b5aade4f03b1324579a25493cd8/List.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ed6aa59cd75423c5b655901d6ec4fb4be48ab669fa6fb01b3a7a7f31be95/Matrix4x4.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.json" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://diff.json" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -39,20 +81,20 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.AKG.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.AKG.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="AKG" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" />
@@ -83,6 +125,7 @@
       <updated>1740513038705</updated>
       <workItem from="1740513039843" duration="1009000" />
       <workItem from="1740593644092" duration="2788000" />
+      <workItem from="1740666964296" duration="12546000" />
     </task>
     <servers />
   </component>
@@ -96,7 +139,7 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+        <line-breakpoint type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/AKG/Program.cs</url>
           <line>9</line>
           <properties documentPath="C:\BSUIR\AKGv2\AKG\AKG\Program.cs" containingFunctionPresentation="Method 'Main'" />

@@ -1,0 +1,19 @@
+<changelist name="Uncommitted_changes_before_Update_at_28_02_2025_13_21_[Changes]" date="1740738115155" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_28_02_2025_13_21_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 28.02.2025 13:21 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="obj/Debug/net8.0-windows/AKG.AssemblyInfoInputs.cache" />
+    <option name="AFTER_PATH" value="obj/Debug/net8.0-windows/AKG.AssemblyInfoInputs.cache" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_28_02_2025_13_21_[Changes]/AKG.AssemblyInfoInputs.cache" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="obj/Debug/net8.0-windows/AKG.assets.cache" />
+    <option name="AFTER_PATH" value="obj/Debug/net8.0-windows/AKG.assets.cache" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_28_02_2025_13_21_[Changes]/AKG.assets.cache" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="obj/project.nuget.cache" />
+    <option name="AFTER_PATH" value="obj/project.nuget.cache" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_28_02_2025_13_21_[Changes]/project.nuget.cache" />
+  </binary>
+</changelist>

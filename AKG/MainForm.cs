@@ -1,3 +1,4 @@
+using System.Numerics;
 using AKG.Drawing;
 using AKG.Realization.Elements;
 using AKG.Realization;
@@ -24,8 +25,8 @@ namespace AKG
         {
             if (_model == null || _painter == null) return;
 
-            //            ScaleValue.Text = $"Масштаб: {_model.Scale:F3}";
-            //            PoligonSize.Text = $"Количество полигонов: {_model.Faces.Count}";
+            //            ScaleValue.Text = $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {_model.Scale:F3}";
+            //            PoligonSize.Text = $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {_model.Faces.Count}";
 
             _painter.PaintModel(_model);
 
@@ -40,7 +41,7 @@ namespace AKG
 
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
-            _model.UpdateModelInfo(new Vertex(0, 0, 10), new Vertex(0, 0, -1), new Vertex(0, 1, 0));
+            _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
             ResizeImage();
             Repaint();
         }
