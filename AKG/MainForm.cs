@@ -49,7 +49,7 @@ namespace AKG
         {
             var bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = bitmap;
-            _painter = new Painter(bitmap);
+            _painter = new Painter(bitmap); 
         }
 
         private void pictureBox_SizeChanged(object sender, EventArgs e)

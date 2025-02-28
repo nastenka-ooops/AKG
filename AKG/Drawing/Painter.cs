@@ -188,15 +188,14 @@ namespace AKG.Drawing
             Parallel.ForEach(faces, face =>
             {
                 var v0 = vertices[face.Indices[0].VertexIndex-1];
-                var v1 = vertices[face.Indices[0].VertexIndex-1];
-                var v2 = vertices[face.Indices[0].VertexIndex-1];
+                var v1 = vertices[face.Indices[1].VertexIndex-1];
+                var v2 = vertices[face.Indices[2].VertexIndex-1];
 
                 DrawLine((int)v0.X, (int)v0.Y, (int)v1.X, (int)v1.Y);
                 DrawLine((int)v0.X, (int)v0.Y, (int)v2.X, (int)v2.Y);
                 DrawLine((int)v2.X, (int)v2.Y, (int)v1.X, (int)v1.Y);
 
             });
-            DrawLine(0, 0, 1000, 1000);
             //пишем из буфера
             _buffer.Flush();
         }
