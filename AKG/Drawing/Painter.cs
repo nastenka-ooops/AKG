@@ -14,7 +14,8 @@ namespace AKG.Drawing
     internal class Painter
     {
         private BuffBitmap _buffer;
-        public Painter (Bitmap bitmap)
+
+        public Painter(Bitmap bitmap)
         {
             _buffer = new BuffBitmap(bitmap);
         }
@@ -67,7 +68,6 @@ namespace AKG.Drawing
             err = el / 2;
 
 
-
             // Цикл растеризации
             _buffer[x, y] = Color.Black;
             for (int i = 0; i < el; i++)
@@ -89,6 +89,7 @@ namespace AKG.Drawing
                     x += pdx;
                     y += pdy;
                 }
+
                 _buffer[x, y] = Color.Black;
             }
         }
@@ -149,52 +150,19 @@ namespace AKG.Drawing
 
         public void PaintModel(Model model)
         {
-            float aspect = _buffer.width / (float)_buffer.height;
-            int zNear = _buffer.width;
-            List<Vertex> vertices = model.GetModelVertices();
+            model.CalculateVertices(_buffer.width, _buffer.height);
 
-            //задаем матрицы переводов
-            Matrix4x4 wordMatr = CreateWordMatrix(model.ShiftX, model.ShiftY, model.ShiftZ, model.RotationOfXInRadians, model.RotationOfYInRadians, model.RotationOfZInRadians, model.Scale);
-
-            Matrix4x4 viewMatr = CreateViewMatrix(new Vector3(model.eye.X, model.eye.Y, model.eye.Z),
-                                                      new Vector3(model.target.X, model.target.Y, model.target.Z),
-                                                      new Vector3(model.up.X, model.up.Y, model.up.Z));
-            Matrix4x4 perspectiveMatr = CreatePerspectiveProjectionMatrix(model.Fov, aspect, zNear, model.zFar);
-
-            Matrix4x4 ortMatr = CreateOrthographicProjectionMatrix(_buffer.width, _buffer.height, zNear, model.zFar);
-
-            Matrix4x4 viewportMatr = CreateViewportMatrix(_buffer.width, _buffer.height, 0, 0);
-            vertices[0] = TransformToWord(vertices[0], wordMatr);
-            vertices[0] = TransformToView(vertices[0], viewMatr);
-            //vertices[i] = TransformToProjection(vertices[i], viewMatr);
-            vertices[0] = TransformToPerspective(vertices[0], perspectiveMatr);
-            vertices[0] = TransformToViewport(vertices[0], viewportMatr);
             //переводим
-            var res = Parallel.For(0, vertices.Count, i =>
-            {
-
-                vertices[i] = TransformToWord(vertices[i], wordMatr);
-                vertices[i] = TransformToView(vertices[i], viewMatr);
-                //vertices[i] = TransformToProjection(vertices[i], viewMatr);
-                vertices[i] = TransformToPerspective(vertices[i], perspectiveMatr);
-                vertices[i] = TransformToViewport(vertices[i], viewportMatr);
-
-
-
-
-            });
-            List <Face> faces = model.GetModelFaces();
             //рисуем в буфер
-            Parallel.ForEach(faces, face =>
+            Parallel.ForEach(model.GetModelFaces(), face =>
             {
-                var v0 = vertices[face.Indices[0].VertexIndex-1];
-                var v1 = vertices[face.Indices[1].VertexIndex-1];
-                var v2 = vertices[face.Indices[2].VertexIndex-1];
+                var v0 = model.GetModelVertices()[face.Indices[0].VertexIndex - 1];
+                var v1 = model.GetModelVertices()[face.Indices[1].VertexIndex - 1];
+                var v2 = model.GetModelVertices()[face.Indices[2].VertexIndex - 1];
 
                 DrawLine((int)v0.X, (int)v0.Y, (int)v1.X, (int)v1.Y);
                 DrawLine((int)v0.X, (int)v0.Y, (int)v2.X, (int)v2.Y);
                 DrawLine((int)v2.X, (int)v2.Y, (int)v1.X, (int)v1.Y);
-
             });
             //пишем из буфера
             _buffer.Flush();

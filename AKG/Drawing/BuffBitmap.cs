@@ -45,8 +45,10 @@ namespace AKG.Drawing
                     _buffer[offset] = value.R;
                     _buffer[offset + 1] = value.G;
                     _buffer[offset + 2] = value.B;
-                    if (depth == 4) // Format32bppArgb
-                        _buffer[offset + 3] = 255; // Записываем альфа-компонент
+                    if (depth==4)
+                    {
+                        _buffer[offset + 3] = 255;
+                    }
                 }
             }
         }
