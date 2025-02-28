@@ -28,12 +28,62 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            pictureBox = new PictureBox();
+            panel1 = new Panel();
+            buttonOpen = new Button();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            panel1.SuspendLayout();
+            SuspendLayout();
+            // 
+            // pictureBox
+            // 
+            pictureBox.BackColor = Color.MistyRose;
+            pictureBox.Dock = DockStyle.Fill;
+            pictureBox.Location = new Point(0, 0);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(584, 561);
+            pictureBox.TabIndex = 0;
+            pictureBox.TabStop = false;
+            pictureBox.SizeChanged += pictureBox_SizeChanged;
+            pictureBox.Click += pictureBox_Click;
+            // 
+            // panel1
+            // 
+            panel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(buttonOpen);
+            panel1.Location = new Point(0, 461);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(584, 100);
+            panel1.TabIndex = 1;
+            // 
+            // buttonOpen
+            // 
+            buttonOpen.Location = new Point(51, 25);
+            buttonOpen.Name = "buttonOpen";
+            buttonOpen.Size = new Size(75, 23);
+            buttonOpen.TabIndex = 0;
+            buttonOpen.Text = "Открыть обьект";
+            buttonOpen.UseVisualStyleBackColor = true;
+            buttonOpen.Click += buttonOpen_Click;
+            // 
+            // MainForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(584, 561);
+            Controls.Add(panel1);
+            Controls.Add(pictureBox);
+            Name = "MainForm";
+            Text = "AKG_Gat_Bru";
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            panel1.ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private PictureBox pictureBox;
+        private Panel panel1;
+        private Button buttonOpen;
     }
 }

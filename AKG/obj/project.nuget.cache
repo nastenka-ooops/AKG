@@ -4,5 +4,12 @@
   "success": true,
   "projectFilePath": "E:\\6sem\\AkgGit\\AKG\\AKG\\AKG.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Ошибка чтения файла кэша E:\\6sem\\AkgGit\\AKG\\AKG\\obj\\project.nuget.cache: Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
