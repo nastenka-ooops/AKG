@@ -29,13 +29,14 @@ namespace AKG.Realization.Elements
         public float RotationOfYInRadians { get; set; } = 0;
         public float RotationOfZInRadians { get; set; } = 0;
 
-        public float Scale { get; set; } = 1;
+        public float Scale {  get; set; } =1f;
+
         public Vector3 eye;
         public Vector3 target;
         public Vector3 up;
         public float zFar = 100;
         public float zNear;
-        public float Fov = (float)(20 * PI / 180);
+        public float Fov = (float)(90 * PI / 180);
 
         public Model(List<Vertex> modelVertices, List<TextureCoordinate> modelTextureCoordinates,
             List<Normal> modelNormals,
@@ -49,6 +50,7 @@ namespace AKG.Realization.Elements
             _viewVertices = new(modelVertices);
             _perspectiveVertices = new(modelVertices);
             _viewportVertices = new(modelVertices);
+ 
         }
 
         public void UpdateModelInfo(Vector3 eye, Vector3 target, Vector3 up)

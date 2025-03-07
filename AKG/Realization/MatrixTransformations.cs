@@ -25,11 +25,12 @@ namespace AKG.Realization
         // up - Вектор "вверх" (обычно (0,1,0))
         public static Vertex TransformToViewMatrix(Vertex vertex, Vector3 eye, Vector3 target, Vector3 up)
         {
+
             // Вычисляем оси камеры
             Vector3 zAxis = Vector3.Normalize(eye - target); // Ось Z (направление от камеры к цели)
             Vector3 xAxis = Vector3.Normalize(Vector3.Cross(up, zAxis)); // Ось X (перпендикуляр к Z и UP)
             Vector3 yAxis = up; // Ось Y (перпендикуляр к Z и X)
-
+             return Transform(vertex,Matrix4x4.CreateLookAt(eye, target, up));
             var viewMatr = new Matrix4x4(
                 xAxis.X, xAxis.Y, xAxis.Z, -Vector3.Dot(xAxis, eye),
                 yAxis.X, yAxis.Y, yAxis.Z, -Vector3.Dot(yAxis, eye),
@@ -41,18 +42,19 @@ namespace AKG.Realization
 
         public static Vertex TransformToPerspectiveProjectionMatrix(Vertex vertex, float fov, float aspect, float zNear, float zFar)
         {
-            float m11 = (float)(1 / Math.Tan(fov / 2) / aspect);
+            float m11 = (float)(1 / (Math.Tan(fov / 2) * aspect));
             float m22 = (float)(1 / Math.Tan(fov / 2));
             float m33 = (float)(zFar / (zNear - zFar));
             float m34 = (float)(zFar * zNear / (zNear - zFar));
-
             var perspectiveProjectionMatr =  new Matrix4x4(
                m11, 0, 0, 0,
                0, m22, 0, 0,
                0, 0, m33, m34,
                0, 0, -1, 0
             );
-            var transformVertex = Transform(vertex, perspectiveProjectionMatr);
+            var transformVertex = Transform(vertex, Matrix4x4.CreatePerspectiveFieldOfView(fov,aspect,zFar,zNear));
+            //var transformVertex = Transform(vertex, Matrix4x4. (fov,aspect,zNear,zFar));
+         //  return Transform(vertex, perspectiveProjectionMatr);
             return new Vertex(transformVertex.X/transformVertex.W, transformVertex.Y/transformVertex.W, 
                 transformVertex.Z/transformVertex.W, transformVertex.W/transformVertex.W);
         }
@@ -87,6 +89,8 @@ namespace AKG.Realization
                 0, 0, 1, 0,
                 0, 0, 0, 1
             );
+            return Transform(vertex,Matrix4x4.CreateViewport(0,0,width, height, 0, 0));
+
             return Transform(vertex, viewportMatr);
         }
         

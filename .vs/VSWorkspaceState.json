@@ -2,7 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\AKG",
+    "\\AKG\\Drawing",
     "\\AKG\\Realization"
   ],
+  "SelectedNode": "\\AKG\\MainForm.cs",
   "PreviewInSolutionExplorer": false
 }

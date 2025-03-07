@@ -46,6 +46,11 @@
             pictureBox.TabStop = false;
             pictureBox.SizeChanged += pictureBox_SizeChanged;
             pictureBox.Click += pictureBox_Click;
+            pictureBox.MouseClick += pictureBox_MouseClick;
+            pictureBox.MouseDown += pictureBox_MouseDown;
+            pictureBox.MouseMove += pictureBox_MouseMove;
+            pictureBox.MouseUp += pictureBox_MouseUp;
+            pictureBox.MouseWheel += PictureBox_MouseWheel;
             // 
             // panel1
             // 
@@ -73,8 +78,10 @@
             ClientSize = new Size(584, 561);
             Controls.Add(panel1);
             Controls.Add(pictureBox);
+            KeyPreview = true;
             Name = "MainForm";
             Text = "AKG_Gat_Bru";
+            KeyDown += MainForm_KeyDown;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             panel1.ResumeLayout(false);
             ResumeLayout(false);
