@@ -56,10 +56,10 @@ namespace AKG
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            // var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
-            // if (openDialog.ShowDialog() != DialogResult.OK) return;
-            //var path = openDialog.FileName;
-            var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
+             var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
+             if (openDialog.ShowDialog() != DialogResult.OK) return;
+            var path = openDialog.FileName;
+            //var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
@@ -144,15 +144,15 @@ namespace AKG
             oldYRotate = _model.RotationOfYInRadians;
         }
 
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e) 
         {
             if (mousePressed)
                 if (_painter != null && _model != null)
                 {
                     _model.RotationOfXInRadians =
-                        oldXRotate + (float)((float)(e.X - mouseX) / 200 * PI / (double)Math.PI);
+                        oldXRotate + (float)((float)(e.Y - mouseY) / 200 * PI / (double)Math.PI);
                     _model.RotationOfYInRadians =
-                        oldYRotate + (float)((float)(e.Y - mouseY) / 200 * PI / (double)Math.PI);
+                        oldYRotate + (float)((float)(e.X - mouseX) / 200 * PI / (double)Math.PI);
                     Repaint();
                 }
         }
@@ -160,8 +160,8 @@ namespace AKG
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             mousePressed = false;
-            _model.RotationOfXInRadians = oldXRotate + (float)((float)(e.X - mouseX) / 200 * PI / (double)Math.PI);
-            _model.RotationOfYInRadians = oldYRotate + (float)((float)(e.Y - mouseY) / 200 * PI / (double)Math.PI);
+            _model.RotationOfXInRadians = oldXRotate + (float)((float)(e.Y - mouseY) / 200 * PI / (double)Math.PI);
+            _model.RotationOfYInRadians = oldYRotate + (float)((float)(e.X - mouseX) / 200 * PI / (double)Math.PI);
         }
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
