@@ -22,11 +22,6 @@ namespace AKG.Drawing
 
         private void DrawLine(int xStart, int yStart, int xEnd, int yEnd)
         {
-           /* xStart += 400;
-            yStart += 400;
-            xEnd += 400;
-            yEnd += 400;*/
-            // Длины проекции на оси абсцисс и ординат
             int dx = xEnd - xStart;
             int dy = yEnd - yStart;
 
@@ -97,12 +92,61 @@ namespace AKG.Drawing
             }
         }
 
+        private void DrawTriangle(Vector4 v0, Vector4 v1, Vector4 v2, Color color)
+        {
+            // Сортировка вершин по Y (v0.Y <= v1.Y <= v2.Y)
+            if (v0.Y > v2.Y) (v0, v2) = (v2, v0);
+            if (v0.Y > v1.Y) (v0, v1) = (v1, v0);
+            if (v1.Y > v2.Y) (v1, v2) = (v2, v1);
 
-        public void PaintModel(Model model)
+            // Вычисление градиентов (приращения X на единицу Y)
+            var kv1 = (v2 - v0) / (v2.Y - v0.Y);
+            var kv2 = (v1 - v0) / (v1.Y - v0.Y);
+            var kv3 = (v2 - v1) / (v2.Y - v1.Y);
+
+            // Значения z-буффера для вершин треугольника
+            var kz1 = (v2.Z - v0.Z) / (v2.Y - v0.Y);
+            var kz2 = (v1.Z - v0.Z) / (v1.Y - v0.Y);
+            var kz3 = (v2.Z - v1.Z) / (v2.Y - v1.Y);
+
+            // Границы по Y
+            var top = Math.Max(0, (int)Math.Ceiling(v0.Y));
+            var bottom = Math.Min(_buffer.height, (int)Math.Ceiling(v2.Y));
+
+            // Цикл по строкам
+            for (int y = top; y < bottom; y++)
+            {
+                // Определяем крайние точки
+                var av = v0 + (y - v0.Y) * kv1;
+                var bv = (y < v1.Y) ? v0 + (y - v0.Y) * kv2 : v1 + (y - v1.Y) * kv3;
+
+                // Значения z-буффера для крайних точек
+                var az = v0.Z + (y - v0.Y) * kz1;
+                var bz = y < v1.Y ? v0.Z + (y - v0.Y) * kz2 : v1.Z + (y - v1.Y) * kz3;
+
+                // Упорядочиваем крайние точки
+                if (av.X > bv.X) (av, bv) = (bv, av);
+                if (av.X > bv.X) (az, bz) = (bz, az);
+
+                // Рисуем горизонтальную линию от av.X до bv.X
+                var left = Math.Max(0, (int)Math.Ceiling(av.X));
+                var right = Math.Min(_buffer.width, (int)Math.Ceiling(bv.X));
+
+                // Цикл по абсциссам
+                var kz = (bz - az) / (bv.X - av.X);
+                for (int x = left; x < right; x++)
+                {
+                    var z = az + (x - av.X) * kz;
+                    if (_buffer.PutZValue(x, y, z))
+                        _buffer[x, y] = color;
+                }
+            }
+        }
+
+        public void PaintModelLaba1(Model model)
         {
             model.CalculateVertices(_buffer.width, _buffer.height);
 
-            var penis = model.GetViewPortVertices();
             //переводим
             //рисуем в буфер
             Parallel.ForEach(model.GetModelFaces(), face =>
@@ -115,6 +159,55 @@ namespace AKG.Drawing
                 DrawLine((int)v0.X, (int)v0.Y, (int)v2.X, (int)v2.Y);
                 DrawLine((int)v2.X, (int)v2.Y, (int)v1.X, (int)v1.Y);
             });
+            //пишем из буфера
+            _buffer.Flush();
+        }
+
+        public void PaintModelLaba2(Model model)
+        {
+            model.CalculateVertices(_buffer.width, _buffer.height);
+
+            //переводим
+            //рисуем в буфер
+            foreach (var face in model.GetModelFaces())
+            {
+                var v0 = model.GetViewPortVertices()[face.Indices[0].VertexIndex - 1];
+                var v1 = model.GetViewPortVertices()[face.Indices[1].VertexIndex - 1];
+                var v2 = model.GetViewPortVertices()[face.Indices[2].VertexIndex - 1];
+
+                // Вычисляем два ребра треугольника
+                var edge1 = v1 - v0;
+                var edge2 = v2 - v0;
+
+                // Вычисляем нормаль через векторное произведение
+                var normal = Vector3.Cross(new Vector3(edge1.X, edge1.Y, edge1.Z),
+                    new Vector3(edge2.X, edge2.Y, edge2.Z));
+                normal = Vector3.Normalize(normal);
+
+                // Проверяем, смотрит ли нормаль в сторону наблюдателя
+                if (Vector3.Dot(normal, model.eye) < 0)
+                {
+                    // Вычисляем освещенность по Ламберту
+                    var vl0 = model.GetModelVertices()[face.Indices[0].VertexIndex - 1];
+                    var vl1 = model.GetModelVertices()[face.Indices[1].VertexIndex - 1];
+                    var vl2 = model.GetModelVertices()[face.Indices[2].VertexIndex - 1];
+
+                    var lightEdge1 = vl1 - vl0;
+                    var lightEdge2 = vl2 - vl0;
+
+                    var lightNormal = Vector3.Normalize(Vector3.Cross(new Vector3(lightEdge1.X, lightEdge1.Y, lightEdge1.Z),
+                            new Vector3(lightEdge2.X, lightEdge2.Y, lightEdge2.Z)));
+                    float intensity = Vector3.Dot(lightNormal, -model.lightDir);
+
+                    // Определяем цвет треугольника (оттенки синего)
+                    int colorValue = (int)(255 * intensity);
+                    colorValue = Math.Clamp(colorValue, 0, 255); // Ограничиваем 0-255
+                    Color shadedColor = Color.FromArgb(colorValue, colorValue, 255); // Голубой с вариациями
+
+                    DrawTriangle(v0, v1, v2, shadedColor);
+                }
+            }
+
             //пишем из буфера
             _buffer.Flush();
         }

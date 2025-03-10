@@ -12,11 +12,11 @@ namespace AKG.Realization.Elements
 {
     public class Model
     {
-        private readonly List<Vertex> _modelVertices;
-        private readonly List<Vertex> _worldVertices;
-        private readonly List<Vertex> _viewVertices;
-        private readonly List<Vertex> _perspectiveVertices;
-        private readonly List<Vertex> _viewportVertices;
+        private readonly List<Vector4> _modelVertices;
+        private readonly List<Vector4> _worldVertices;
+        private readonly List<Vector4> _viewVertices;
+        private readonly List<Vector4> _perspectiveVertices;
+        private readonly List<Vector4> _viewportVertices;
         private readonly List<TextureCoordinate> _modelTextureCoordinates;
         private readonly List<Normal> _modelNormals;
         private readonly List<Face> _modelFaces;
@@ -29,16 +29,17 @@ namespace AKG.Realization.Elements
         public float RotationOfYInRadians { get; set; } = 0;
         public float RotationOfZInRadians { get; set; } = 0;
 
-        public float Scale {  get; set; } =1f;
+        public float Scale { get; set; } = 0.005f;
 
         public Vector3 eye;
         public Vector3 target;
         public Vector3 up;
+        public Vector3 lightDir = new Vector3(0, 0, -1);
         public float zFar = 100;
         public float zNear;
-        public float Fov = (float)(90 * PI / 180);
+        public float Fov = (float)(20 * PI / 180);
 
-        public Model(List<Vertex> modelVertices, List<TextureCoordinate> modelTextureCoordinates,
+        public Model(List<Vector4> modelVertices, List<TextureCoordinate> modelTextureCoordinates,
             List<Normal> modelNormals,
             List<Face> modelFaces)
         {
@@ -50,7 +51,6 @@ namespace AKG.Realization.Elements
             _viewVertices = new(modelVertices);
             _perspectiveVertices = new(modelVertices);
             _viewportVertices = new(modelVertices);
- 
         }
 
         public void UpdateModelInfo(Vector3 eye, Vector3 target, Vector3 up)
@@ -60,15 +60,15 @@ namespace AKG.Realization.Elements
             this.up = up;
         }
 
-        public List<Vertex> GetModelVertices() => _modelVertices;
-        public List<Vertex> GetViewPortVertices() => _viewportVertices;
+        public List<Vector4> GetModelVertices() => _modelVertices;
+        public List<Vector4> GetViewPortVertices() => _viewportVertices;
         public List<TextureCoordinate> GetModelTextureCoordinates() => _modelTextureCoordinates;
         public List<Normal> GetModelNormals() => _modelNormals;
         public List<Face> GetModelFaces() => _modelFaces;
 
         public void CalculateVertices(int width, int height)
         {
-            float aspect = width / (float) height;
+            float aspect = width / (float)height;
             zNear = width;
 
             var res = Parallel.For(0, _modelVertices.Count, i =>

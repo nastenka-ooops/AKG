@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Numerics;
 using AKG.Realization.Elements;
 
 namespace AKG.Realization
@@ -7,7 +8,7 @@ namespace AKG.Realization
     {
         public Model Parse(string filePath)
         {
-            List<Vertex> Vertices = new List<Vertex>();
+            List<Vector4> Vertices = new List<Vector4>();
             List<TextureCoordinate> TextureCoordinates = new List<TextureCoordinate>();
             List<Normal> Normals = new List<Normal>();
             List<Face> Faces = new List<Face>();
@@ -20,7 +21,7 @@ namespace AKG.Realization
                 switch (parts[0])
                 {
                     case "v":
-                        Vertices.Add(new Vertex(
+                        Vertices.Add(new Vector4(
                             float.Parse(parts[1], CultureInfo.InvariantCulture),
                             float.Parse(parts[2], CultureInfo.InvariantCulture),
                             float.Parse(parts[3], CultureInfo.InvariantCulture),

@@ -33,3 +33,4 @@ E:\6sem\AkgGit\AKG\AKG\obj\Debug\net8.0-windows\AKG.pdb
 E:\6sem\AkgGit\AKG\AKG\obj\Debug\net8.0-windows\AKG.genruntimeconfig.cache
 E:\6sem\AkgGit\AKG\AKG\obj\Debug\net8.0-windows\ref\AKG.dll
 E:\6sem\AkgGit\AKG\AKG\obj\Debug\net8.0-windows\AKG.Properties.Resources.resources
+C:\BSUIR\AKGv2\AKG\obj\Debug\net8.0-windows\AKG.Properties.Resources.resources
