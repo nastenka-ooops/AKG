@@ -56,15 +56,13 @@ namespace AKG
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-             var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
-             if (openDialog.ShowDialog() != DialogResult.OK) return;
-            var path = openDialog.FileName;
-            //var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
+            // var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
+            // if (openDialog.ShowDialog() != DialogResult.OK) return;
+            // var path = openDialog.FileName;
+            var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
-            /*_model.ShiftX = 0.3f;
-            _model.ShiftY = 0.3f;*/
             ResizeImage();
             Repaint();
         }
@@ -144,7 +142,7 @@ namespace AKG
             oldYRotate = _model.RotationOfYInRadians;
         }
 
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e) 
+        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (mousePressed)
                 if (_painter != null && _model != null)

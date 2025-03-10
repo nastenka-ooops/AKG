@@ -34,7 +34,7 @@ namespace AKG.Realization.Elements
         public Vector3 eye;
         public Vector3 target;
         public Vector3 up;
-        public Vector3 lightDir = new Vector3(0, 0, -1);
+        public Vector3 lightDir = new Vector3(0, -1, 0);
         public float zFar = 100;
         public float zNear;
         public float Fov = (float)(20 * PI / 180);
@@ -61,6 +61,7 @@ namespace AKG.Realization.Elements
         }
 
         public List<Vector4> GetModelVertices() => _modelVertices;
+        public List<Vector4> GetWorldVertices() => _worldVertices;
         public List<Vector4> GetViewPortVertices() => _viewportVertices;
         public List<TextureCoordinate> GetModelTextureCoordinates() => _modelTextureCoordinates;
         public List<Normal> GetModelNormals() => _modelNormals;

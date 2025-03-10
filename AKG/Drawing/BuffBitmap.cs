@@ -62,6 +62,7 @@ namespace AKG.Drawing
             }
             return false;
         }
+        
         private void Reset()
         {
             Array.Fill<byte>(_buffer, 255);
