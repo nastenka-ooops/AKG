@@ -204,7 +204,7 @@ namespace AKG.Drawing
                     // Определяем цвет треугольника (оттенки синего)
                     int colorValue = (int)(255 * intensity);
                     colorValue = Math.Clamp(colorValue, 0, 255); // Ограничиваем 0-255
-                    Color shadedColor = Color.FromArgb(colorValue, colorValue, 255); // Голубой с вариациями
+                    Color shadedColor = Color.FromArgb(255, colorValue, colorValue); // Голубой с вариациями
 
                     DrawTriangle(
                         new Vector4(v0.X, v0.Y, vl0.Z, v0.W),

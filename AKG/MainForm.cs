@@ -56,10 +56,10 @@ namespace AKG
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            // var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
-            // if (openDialog.ShowDialog() != DialogResult.OK) return;
-            // var path = openDialog.FileName;
-            var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
+            var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
+            if (openDialog.ShowDialog() != DialogResult.OK) return;
+            var path = openDialog.FileName;
+            //var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
