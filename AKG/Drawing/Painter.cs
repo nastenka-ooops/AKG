@@ -21,9 +21,6 @@ namespace AKG.Drawing
         public Painter(Bitmap bitmap)
         {
             _buffer = new BuffBitmap(bitmap);
-            this.R = 0;
-            this.G = 0; 
-            this.B = 255;
         }
 
         private void DrawLine(int xStart, int yStart, int xEnd, int yEnd)

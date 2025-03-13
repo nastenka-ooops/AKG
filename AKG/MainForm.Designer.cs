@@ -30,6 +30,7 @@
         {
             pictureBox = new PictureBox();
             panel1 = new Panel();
+            buttonNastya = new Button();
             button1 = new Button();
             textBoxB = new TextBox();
             textBoxG = new TextBox();
@@ -43,7 +44,6 @@
             label1 = new Label();
             textBoxScale = new TextBox();
             buttonOpen = new Button();
-            buttonNastya = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -86,6 +86,17 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(584, 124);
             panel1.TabIndex = 1;
+            // 
+            // buttonNastya
+            // 
+            buttonNastya.BackColor = Color.LightCoral;
+            buttonNastya.Location = new Point(22, 83);
+            buttonNastya.Name = "buttonNastya";
+            buttonNastya.Size = new Size(75, 23);
+            buttonNastya.TabIndex = 13;
+            buttonNastya.Text = "Настюша";
+            buttonNastya.UseVisualStyleBackColor = false;
+            buttonNastya.Click += button2_Click;
             // 
             // button1
             // 
@@ -202,17 +213,6 @@
             buttonOpen.Text = "Открыть обьект";
             buttonOpen.UseVisualStyleBackColor = true;
             buttonOpen.Click += buttonOpen_Click;
-            // 
-            // buttonNastya
-            // 
-            buttonNastya.BackColor = Color.LightCoral;
-            buttonNastya.Location = new Point(22, 83);
-            buttonNastya.Name = "buttonNastya";
-            buttonNastya.Size = new Size(75, 23);
-            buttonNastya.TabIndex = 13;
-            buttonNastya.Text = "Открыть обьект";
-            buttonNastya.UseVisualStyleBackColor = false;
-            buttonNastya.Click += button2_Click;
             // 
             // MainForm
             // 

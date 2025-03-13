@@ -73,6 +73,12 @@ namespace AKG
             var bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
             pictureBox.Image = bitmap;
             _painter = new Painter(bitmap);
+            int r = int.Parse(textBoxR.Text);
+            int g = int.Parse(textBoxG.Text);
+            int b = int.Parse(textBoxB.Text);
+            _painter.R = r;
+            _painter.G = g;
+            _painter.B = b;
         }
 
         private void pictureBox_SizeChanged(object sender, EventArgs e)
