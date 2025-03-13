@@ -64,6 +64,8 @@ namespace AKG
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
+            _model.RotationOfXInRadians = 0f;
+            _model.RotationOfYInRadians = 0f;
             ResizeImage();
             Repaint();
         }
@@ -207,10 +209,41 @@ namespace AKG
 
         private void button2_Click(object sender, EventArgs e)
         {
+            textBoxR.Text = "255";
+            textBoxG.Text = "105";
+            textBoxB.Text = "180";
+
+            var path = "..\\..\\..\\Models\\cat.obj";
+            ObjParser objParser = new ObjParser();
+            _model = objParser.Parse(path);
+            _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
+            _model.Scale = 0.09f;
+            ScaleChange = 0.001f;
+            _model.RotationOfXInRadians = 0;
+            _model.RotationOfYInRadians = -1.25f;
+            textBoxScale.Text = "0,09";
+            textBoxScaleChange.Text = "0,001";
+            ResizeImage();
+            Repaint();
+            Repaint();
+        }
+
+        private void buttonSkull_Click(object sender, EventArgs e)
+        {
+            textBoxR.Text = "125";
+            textBoxG.Text = "249";
+            textBoxB.Text = "255";
+
             var path = "..\\..\\..\\Models\\craneo.obj";
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
+            _model.Scale = 0.09f;
+            ScaleChange = 0.001f;
+            _model.RotationOfXInRadians = 0f;
+            _model.RotationOfYInRadians = 0f;
+            textBoxScale.Text = "0,09";
+            textBoxScaleChange.Text = "0,001";
             ResizeImage();
             Repaint();
         }

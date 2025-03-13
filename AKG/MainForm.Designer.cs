@@ -44,6 +44,7 @@
             label1 = new Label();
             textBoxScale = new TextBox();
             buttonOpen = new Button();
+            buttonSkull = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -68,6 +69,7 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(buttonSkull);
             panel1.Controls.Add(buttonNastya);
             panel1.Controls.Add(button1);
             panel1.Controls.Add(textBoxB);
@@ -92,7 +94,7 @@
             buttonNastya.BackColor = Color.LightCoral;
             buttonNastya.Location = new Point(22, 83);
             buttonNastya.Name = "buttonNastya";
-            buttonNastya.Size = new Size(75, 23);
+            buttonNastya.Size = new Size(85, 23);
             buttonNastya.TabIndex = 13;
             buttonNastya.Text = "Настюша";
             buttonNastya.UseVisualStyleBackColor = false;
@@ -162,7 +164,7 @@
             // 
             // btnScaleChange
             // 
-            btnScaleChange.Location = new Point(194, 84);
+            btnScaleChange.Location = new Point(283, 83);
             btnScaleChange.Name = "btnScaleChange";
             btnScaleChange.Size = new Size(111, 29);
             btnScaleChange.TabIndex = 5;
@@ -172,7 +174,7 @@
             // 
             // textBoxScaleChange
             // 
-            textBoxScaleChange.Location = new Point(194, 54);
+            textBoxScaleChange.Location = new Point(283, 53);
             textBoxScaleChange.Name = "textBoxScaleChange";
             textBoxScaleChange.Size = new Size(111, 23);
             textBoxScaleChange.TabIndex = 4;
@@ -181,7 +183,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(113, 57);
+            label2.Location = new Point(202, 56);
             label2.Name = "label2";
             label2.Size = new Size(75, 15);
             label2.TabIndex = 3;
@@ -190,7 +192,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(155, 26);
+            label1.Location = new Point(244, 25);
             label1.Name = "label1";
             label1.Size = new Size(33, 15);
             label1.TabIndex = 2;
@@ -198,7 +200,7 @@
             // 
             // textBoxScale
             // 
-            textBoxScale.Location = new Point(194, 23);
+            textBoxScale.Location = new Point(283, 22);
             textBoxScale.Name = "textBoxScale";
             textBoxScale.Size = new Size(111, 23);
             textBoxScale.TabIndex = 1;
@@ -208,11 +210,22 @@
             // 
             buttonOpen.Location = new Point(22, 22);
             buttonOpen.Name = "buttonOpen";
-            buttonOpen.Size = new Size(75, 23);
+            buttonOpen.Size = new Size(85, 23);
             buttonOpen.TabIndex = 0;
             buttonOpen.Text = "Открыть обьект";
             buttonOpen.UseVisualStyleBackColor = true;
             buttonOpen.Click += buttonOpen_Click;
+            // 
+            // buttonSkull
+            // 
+            buttonSkull.BackColor = Color.Cyan;
+            buttonSkull.Location = new Point(22, 53);
+            buttonSkull.Name = "buttonSkull";
+            buttonSkull.Size = new Size(85, 23);
+            buttonSkull.TabIndex = 14;
+            buttonSkull.Text = "Черепушка";
+            buttonSkull.UseVisualStyleBackColor = false;
+            buttonSkull.Click += buttonSkull_Click;
             // 
             // MainForm
             // 
@@ -249,5 +262,6 @@
         private Label label4;
         private Label label3;
         private Button buttonNastya;
+        private Button buttonSkull;
     }
 }

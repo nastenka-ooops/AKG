@@ -25,8 +25,8 @@ namespace AKG.Realization.Elements
         public float ShiftY { get; set; } = 0;
         public float ShiftZ { get; set; } = 0;
 
-        public float RotationOfXInRadians { get; set; } = 0;
-        public float RotationOfYInRadians { get; set; } = 0;
+        public float RotationOfXInRadians { get; set; }
+        public float RotationOfYInRadians { get; set; }
         public float RotationOfZInRadians { get; set; } = 0;
 
         public float Scale { get; set; } = 0.005f;
