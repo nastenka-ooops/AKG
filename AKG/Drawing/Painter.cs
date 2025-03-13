@@ -14,10 +14,16 @@ namespace AKG.Drawing
     internal class Painter
     {
         private BuffBitmap _buffer;
+        public int R {  get; set; }
+        public int G {  get; set; }
+        public int B {  get; set; }
 
         public Painter(Bitmap bitmap)
         {
             _buffer = new BuffBitmap(bitmap);
+            this.R = 0;
+            this.G = 0; 
+            this.B = 255;
         }
 
         private void DrawLine(int xStart, int yStart, int xEnd, int yEnd)
@@ -204,7 +210,11 @@ namespace AKG.Drawing
                     // Определяем цвет треугольника (оттенки синего)
                     int colorValue = (int)(255 * intensity);
                     colorValue = Math.Clamp(colorValue, 0, 255); // Ограничиваем 0-255
-                    Color shadedColor = Color.FromArgb(255, colorValue, colorValue); // Голубой с вариациями
+                    int r = (int)(this.R * colorValue / 255);
+                    int g = (int)(this.G * colorValue / 255);
+                    int b = (int)(this.B * colorValue / 255);
+                    //Color shadedColor = Color.FromArgb(255, colorValue, colorValue, colorValue); // Голубой с вариациями
+                    Color shadedColor = Color.FromArgb(255, b, g, r); // Голубой с вариациями
 
                     DrawTriangle(
                         new Vector4(v0.X, v0.Y, vl0.Z, v0.W),

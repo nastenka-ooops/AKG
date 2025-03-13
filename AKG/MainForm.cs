@@ -3,12 +3,13 @@ using AKG.Drawing;
 using AKG.Realization.Elements;
 using AKG.Realization;
 using static System.Math;
+using System.IO;
 
 namespace AKG
 {
     public partial class MainForm : Form
     {
-        private const float ScaleChange = 0.01f;
+        private float ScaleChange = 0.01f;
         private const float ShiftChange = 1f;
 
         private Model _model;
@@ -29,7 +30,7 @@ namespace AKG
             if (e.Delta > 0)
             {
                 _model.Scale += ScaleChange; // Обработка прокрутки вверх
-
+                textBoxScale.Text = _model.Scale.ToString();
                 Repaint();
             }
             else if (e.Delta < 0)
@@ -39,7 +40,7 @@ namespace AKG
                 {
                     _model.Scale = 0.001f;
                 }
-
+                textBoxScale.Text = _model.Scale.ToString();
                 Repaint();
                 // Обработка прокрутки вниз
             }
@@ -86,27 +87,35 @@ namespace AKG
             {
                 case Keys.W:
                     _model.ShiftY -= ShiftChange;
+                    Repaint();
                     break;
                 case Keys.S:
                     _model.ShiftY += ShiftChange;
+                    Repaint();
                     break;
                 case Keys.A:
                     _model.ShiftX -= ShiftChange;
+                    Repaint();
                     break;
                 case Keys.D:
                     _model.ShiftX += ShiftChange;
+                    Repaint();
                     break;
                 case Keys.J:
                     _model.RotationOfXInRadians += (float)(10 * PI / 180);
+                    Repaint();
                     break;
                 case Keys.L:
                     _model.RotationOfXInRadians -= (float)(10 * PI / 180);
+                    Repaint();
                     break;
                 case Keys.I:
                     _model.RotationOfYInRadians += (float)(10 * PI / 180);
+                    Repaint();
                     break;
                 case Keys.K:
                     _model.RotationOfYInRadians -= (float)(10 * PI / 180);
+                    Repaint();
                     break;
                 case Keys.R:
                     _model.Scale += 0.001f;
@@ -124,7 +133,6 @@ namespace AKG
                     break;
             }
 
-            Repaint();
         }
 
         private bool mousePressed = false;
@@ -167,6 +175,38 @@ namespace AKG
             mousePressed = true;
             mouseX = e.X;
             mouseY = e.Y;
+        }
+
+        private void btnScaleChange_Click(object sender, EventArgs e)
+        {
+            ScaleChange = float.Parse(textBoxScaleChange.Text);
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int r = int.Parse(textBoxR.Text);
+            int g = int.Parse(textBoxG.Text);
+            int b = int.Parse(textBoxB.Text);
+            _painter.R = r;
+            _painter.G = g;
+            _painter.B = b;
+            Repaint();
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var path = "..\\..\\..\\Models\\craneo.obj";
+            ObjParser objParser = new ObjParser();
+            _model = objParser.Parse(path);
+            _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
+            ResizeImage();
+            Repaint();
         }
     }
 }
