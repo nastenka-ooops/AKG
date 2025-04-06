@@ -50,14 +50,17 @@ namespace AKG
         {
             if (_model == null || _painter == null) return;
 
-            _painter.PaintModelLaba2(_model);
+            _painter.PaintModelLaba3(_model);
 
             pictureBox.Refresh();
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            var openDialog = new OpenFileDialog() { Filter = "OBJ geometry format(*.obj)|*.obj" };
+            var openDialog = new OpenFileDialog() {
+                Filter = "OBJ geometry format(*.obj)|*.obj",
+                InitialDirectory = "..\\..\\..\\Models" 
+            };
             if (openDialog.ShowDialog() != DialogResult.OK) return;
             var path = openDialog.FileName;
             //var path = "C:\\BSUIR\\AKGv2\\models\\low_poly_cat.obj";
@@ -66,6 +69,8 @@ namespace AKG
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
             _model.RotationOfXInRadians = 0f;
             _model.RotationOfYInRadians = 0f;
+            _model.Scale = 0.01f;
+            _model.setDefaultMaterial();
             ResizeImage();
             Repaint();
         }
@@ -188,6 +193,7 @@ namespace AKG
         private void btnScaleChange_Click(object sender, EventArgs e)
         {
             ScaleChange = float.Parse(textBoxScaleChange.Text);
+            _model.Scale = float.Parse(textBoxScale.Text);
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -219,6 +225,7 @@ namespace AKG
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
             _model.Scale = 0.09f;
             ScaleChange = 0.001f;
+            _model.setDefaultMaterial();
             _model.RotationOfXInRadians = 0;
             _model.RotationOfYInRadians = -1.25f;
             textBoxScale.Text = "0,09";
@@ -240,6 +247,7 @@ namespace AKG
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
             _model.Scale = 0.09f;
             ScaleChange = 0.001f;
+            _model.setDefaultMaterial();
             _model.RotationOfXInRadians = 0f;
             _model.RotationOfYInRadians = 0f;
             textBoxScale.Text = "0,09";
