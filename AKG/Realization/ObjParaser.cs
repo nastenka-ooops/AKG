@@ -9,7 +9,7 @@ namespace AKG.Realization
         public Model Parse(string filePath)
         {
             List<Vector4> Vertices = new List<Vector4>();
-            List<TextureCoordinate> TextureCoordinates = new List<TextureCoordinate>();
+            List<Vector3> TextureCoordinates = new List<Vector3>();
             List<Normal> Normals = new List<Normal>();
             List<Face> Faces = new List<Face>();
 
@@ -29,7 +29,7 @@ namespace AKG.Realization
                         break;
 
                     case "vt":
-                        TextureCoordinates.Add(new TextureCoordinate(
+                        TextureCoordinates.Add(new Vector3(
                             float.Parse(parts[1], CultureInfo.InvariantCulture),
                             parts.Length > 2 ? float.Parse(parts[2], CultureInfo.InvariantCulture) : 0,
                             parts.Length > 3 ? float.Parse(parts[3], CultureInfo.InvariantCulture) : 0));

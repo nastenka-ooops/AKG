@@ -17,7 +17,7 @@ namespace AKG.Realization.Elements
         private readonly List<Vector4> _viewVertices;
         private readonly List<Vector4> _perspectiveVertices;
         private readonly List<Vector4> _viewportVertices;
-        private readonly List<TextureCoordinate> _modelTextureCoordinates;
+        private readonly List<Vector3> _modelTextureCoordinates;
         private readonly List<Normal> _modelNormals;
         private readonly List<Face> _modelFaces;
 
@@ -35,6 +35,9 @@ namespace AKG.Realization.Elements
         public Vector3 Kd { get; set; }//рассеяное
         public Vector3 Ks { get; set; }//зеркальное
         public float Shininess { get; set; } // коэф блеска
+        
+        public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
+        public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
 
         public void setDefaultMaterial()
         {
@@ -52,7 +55,7 @@ namespace AKG.Realization.Elements
         public float zNear;
         public float Fov = (float)(20 * PI / 180);
 
-        public Model(List<Vector4> modelVertices, List<TextureCoordinate> modelTextureCoordinates,
+        public Model(List<Vector4> modelVertices, List<Vector3> modelTextureCoordinates,
             List<Normal> modelNormals,
             List<Face> modelFaces)
         {
@@ -76,7 +79,7 @@ namespace AKG.Realization.Elements
         public List<Vector4> GetModelVertices() => _modelVertices;
         public List<Vector4> GetWorldVertices() => _worldVertices;
         public List<Vector4> GetViewPortVertices() => _viewportVertices;
-        public List<TextureCoordinate> GetModelTextureCoordinates() => _modelTextureCoordinates;
+        public List<Vector3> GetModelTextureCoordinates() => _modelTextureCoordinates;
         public List<Normal> GetModelNormals() => _modelNormals;
         public List<Face> GetModelFaces() => _modelFaces;
 

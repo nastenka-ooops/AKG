@@ -25,6 +25,14 @@ namespace AKG.Drawing
             width = _bitmap.Width;
             height = _bitmap.Height;
             zBuffer = new double[width, height];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    zBuffer[j, i] = int.MinValue;
+                }
+            }
+
             depth = GetPixelFormatSize(bitmap.PixelFormat) / 8;
             _buffer = new byte[width * height * depth];
         }
@@ -45,13 +53,14 @@ namespace AKG.Drawing
                     _buffer[offset] = value.R;
                     _buffer[offset + 1] = value.G;
                     _buffer[offset + 2] = value.B;
-                    if (depth==4)
+                    if (depth == 4)
                     {
                         _buffer[offset + 3] = 255;
                     }
                 }
             }
         }
+
         public bool PutZValue(int x, int y, double z)
         {
             double existedZ = zBuffer[x, y];
@@ -60,25 +69,26 @@ namespace AKG.Drawing
                 zBuffer[x, y] = z;
                 return true;
             }
+
             return false;
         }
-        
+
         private void Reset()
         {
             Array.Fill<byte>(_buffer, 255);
             for (int i = 0; i < height; i++)
-                for (int j = 0; j < width; j++)
-                    zBuffer[j, i] = int.MinValue;
+            for (int j = 0; j < width; j++)
+                zBuffer[j, i] = int.MinValue;
         }
 
         public void Flush() //переписать обратно в bitmap 
         {
-            var data = _bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, _bitmap.PixelFormat);
+            var data = _bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite,
+                _bitmap.PixelFormat);
             Marshal.Copy(_buffer, 0, data.Scan0, _buffer.Length);
             _bitmap.UnlockBits(data);
             _bitmap.Save("tmp.png", ImageFormat.Png);
             Reset();
         }
-
     }
 }

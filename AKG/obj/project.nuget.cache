@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "5yztUxcDKOqgkJuVXSFMOsq09OK6+3GBflQcfvFM62B2IajVSzRJVmP8WYhnr0BK/ewpn/hVoAsZQ80I6mvcUw==",
+  "dgSpecHash": "jRdR/3eZXvM=",
   "success": true,
-  "projectFilePath": "E:\\6sem\\AkgGit\\AKG\\AKG\\AKG.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\BSUIR\\AKGv2\\AKG\\AKG.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.12\\microsoft.netcore.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.12\\microsoft.windowsdesktop.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.12\\microsoft.aspnetcore.app.ref.8.0.12.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.12\\microsoft.netcore.app.host.win-x64.8.0.12.nupkg.sha512"
+  ],
   "logs": []
 }

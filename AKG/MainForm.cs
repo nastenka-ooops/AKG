@@ -50,7 +50,7 @@ namespace AKG
         {
             if (_model == null || _painter == null) return;
 
-            _painter.PaintModelLaba3(_model);
+            _painter.PaintModelLaba4(_model);
 
             pictureBox.Refresh();
         }
