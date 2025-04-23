@@ -30,6 +30,14 @@
         {
             pictureBox = new PictureBox();
             panel1 = new Panel();
+            buttonLightColor = new Button();
+            txtBoxColorB = new TextBox();
+            txtBoxColorG = new TextBox();
+            txtBoxColorR = new TextBox();
+            label6 = new Label();
+            label7 = new Label();
+            label8 = new Label();
+            buttonSkull = new Button();
             buttonNastya = new Button();
             button1 = new Button();
             textBoxB = new TextBox();
@@ -44,7 +52,9 @@
             label1 = new Label();
             textBoxScale = new TextBox();
             buttonOpen = new Button();
-            buttonSkull = new Button();
+            label9 = new Label();
+            label10 = new Label();
+            comboBoxLabChoice = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -55,7 +65,7 @@
             pictureBox.Dock = DockStyle.Fill;
             pictureBox.Location = new Point(0, 0);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(584, 581);
+            pictureBox.Size = new Size(660, 581);
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             pictureBox.SizeChanged += pictureBox_SizeChanged;
@@ -69,6 +79,16 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(comboBoxLabChoice);
+            panel1.Controls.Add(label10);
+            panel1.Controls.Add(label9);
+            panel1.Controls.Add(buttonLightColor);
+            panel1.Controls.Add(txtBoxColorB);
+            panel1.Controls.Add(txtBoxColorG);
+            panel1.Controls.Add(txtBoxColorR);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(label7);
+            panel1.Controls.Add(label8);
             panel1.Controls.Add(buttonSkull);
             panel1.Controls.Add(buttonNastya);
             panel1.Controls.Add(button1);
@@ -86,8 +106,81 @@
             panel1.Controls.Add(buttonOpen);
             panel1.Location = new Point(0, 457);
             panel1.Name = "panel1";
-            panel1.Size = new Size(584, 124);
+            panel1.Size = new Size(660, 124);
             panel1.TabIndex = 1;
+            panel1.Paint += panel1_Paint;
+            // 
+            // buttonLightColor
+            // 
+            buttonLightColor.Location = new Point(592, 26);
+            buttonLightColor.Name = "buttonLightColor";
+            buttonLightColor.Size = new Size(56, 73);
+            buttonLightColor.TabIndex = 21;
+            buttonLightColor.Text = "Change";
+            buttonLightColor.UseVisualStyleBackColor = true;
+            buttonLightColor.Click += buttonLightColor_Click;
+            // 
+            // txtBoxColorB
+            // 
+            txtBoxColorB.Location = new Point(557, 82);
+            txtBoxColorB.Name = "txtBoxColorB";
+            txtBoxColorB.Size = new Size(29, 23);
+            txtBoxColorB.TabIndex = 20;
+            txtBoxColorB.Text = "255";
+            // 
+            // txtBoxColorG
+            // 
+            txtBoxColorG.Location = new Point(557, 52);
+            txtBoxColorG.Name = "txtBoxColorG";
+            txtBoxColorG.Size = new Size(29, 23);
+            txtBoxColorG.TabIndex = 19;
+            txtBoxColorG.Text = "255";
+            // 
+            // txtBoxColorR
+            // 
+            txtBoxColorR.Location = new Point(557, 25);
+            txtBoxColorR.Name = "txtBoxColorR";
+            txtBoxColorR.Size = new Size(29, 23);
+            txtBoxColorR.TabIndex = 18;
+            txtBoxColorR.Text = "255";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(537, 82);
+            label6.Name = "label6";
+            label6.Size = new Size(14, 15);
+            label6.TabIndex = 17;
+            label6.Text = "B";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(537, 55);
+            label7.Name = "label7";
+            label7.Size = new Size(15, 15);
+            label7.TabIndex = 16;
+            label7.Text = "G";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(537, 28);
+            label8.Name = "label8";
+            label8.Size = new Size(14, 15);
+            label8.TabIndex = 15;
+            label8.Text = "R";
+            // 
+            // buttonSkull
+            // 
+            buttonSkull.BackColor = Color.Cyan;
+            buttonSkull.Location = new Point(22, 53);
+            buttonSkull.Name = "buttonSkull";
+            buttonSkull.Size = new Size(85, 23);
+            buttonSkull.TabIndex = 14;
+            buttonSkull.Text = "Черепушка";
+            buttonSkull.UseVisualStyleBackColor = false;
+            buttonSkull.Click += buttonSkull_Click;
             // 
             // buttonNastya
             // 
@@ -102,9 +195,9 @@
             // 
             // button1
             // 
-            button1.Location = new Point(480, 28);
+            button1.Location = new Point(466, 28);
             button1.Name = "button1";
-            button1.Size = new Size(81, 73);
+            button1.Size = new Size(56, 73);
             button1.TabIndex = 12;
             button1.Text = "Change";
             button1.UseVisualStyleBackColor = true;
@@ -112,32 +205,32 @@
             // 
             // textBoxB
             // 
-            textBoxB.Location = new Point(430, 84);
+            textBoxB.Location = new Point(431, 84);
             textBoxB.Name = "textBoxB";
-            textBoxB.Size = new Size(44, 23);
+            textBoxB.Size = new Size(29, 23);
             textBoxB.TabIndex = 11;
             textBoxB.Text = "255";
             // 
             // textBoxG
             // 
-            textBoxG.Location = new Point(430, 54);
+            textBoxG.Location = new Point(431, 54);
             textBoxG.Name = "textBoxG";
-            textBoxG.Size = new Size(44, 23);
+            textBoxG.Size = new Size(29, 23);
             textBoxG.TabIndex = 10;
             textBoxG.Text = "255";
             // 
             // textBoxR
             // 
-            textBoxR.Location = new Point(430, 27);
+            textBoxR.Location = new Point(431, 27);
             textBoxR.Name = "textBoxR";
-            textBoxR.Size = new Size(44, 23);
+            textBoxR.Size = new Size(29, 23);
             textBoxR.TabIndex = 9;
             textBoxR.Text = "255";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(410, 84);
+            label5.Location = new Point(411, 84);
             label5.Name = "label5";
             label5.Size = new Size(14, 15);
             label5.TabIndex = 8;
@@ -146,7 +239,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(410, 57);
+            label4.Location = new Point(411, 57);
             label4.Name = "label4";
             label4.Size = new Size(15, 15);
             label4.TabIndex = 7;
@@ -155,7 +248,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(410, 30);
+            label3.Location = new Point(411, 30);
             label3.Name = "label3";
             label3.Size = new Size(14, 15);
             label3.TabIndex = 6;
@@ -164,7 +257,7 @@
             // 
             // btnScaleChange
             // 
-            btnScaleChange.Location = new Point(283, 83);
+            btnScaleChange.Location = new Point(294, 86);
             btnScaleChange.Name = "btnScaleChange";
             btnScaleChange.Size = new Size(111, 29);
             btnScaleChange.TabIndex = 5;
@@ -174,7 +267,7 @@
             // 
             // textBoxScaleChange
             // 
-            textBoxScaleChange.Location = new Point(283, 53);
+            textBoxScaleChange.Location = new Point(294, 56);
             textBoxScaleChange.Name = "textBoxScaleChange";
             textBoxScaleChange.Size = new Size(111, 23);
             textBoxScaleChange.TabIndex = 4;
@@ -183,7 +276,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(202, 56);
+            label2.Location = new Point(213, 59);
             label2.Name = "label2";
             label2.Size = new Size(75, 15);
             label2.TabIndex = 3;
@@ -192,7 +285,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(244, 25);
+            label1.Location = new Point(255, 28);
             label1.Name = "label1";
             label1.Size = new Size(33, 15);
             label1.TabIndex = 2;
@@ -200,7 +293,7 @@
             // 
             // textBoxScale
             // 
-            textBoxScale.Location = new Point(283, 22);
+            textBoxScale.Location = new Point(294, 25);
             textBoxScale.Name = "textBoxScale";
             textBoxScale.Size = new Size(111, 23);
             textBoxScale.TabIndex = 1;
@@ -216,22 +309,39 @@
             buttonOpen.UseVisualStyleBackColor = true;
             buttonOpen.Click += buttonOpen_Click;
             // 
-            // buttonSkull
+            // label9
             // 
-            buttonSkull.BackColor = Color.Cyan;
-            buttonSkull.Location = new Point(22, 53);
-            buttonSkull.Name = "buttonSkull";
-            buttonSkull.Size = new Size(85, 23);
-            buttonSkull.TabIndex = 14;
-            buttonSkull.Text = "Черепушка";
-            buttonSkull.UseVisualStyleBackColor = false;
-            buttonSkull.Click += buttonSkull_Click;
+            label9.AutoSize = true;
+            label9.Location = new Point(439, 9);
+            label9.Name = "label9";
+            label9.Size = new Size(74, 15);
+            label9.TabIndex = 22;
+            label9.Text = "Object Color";
+            label9.Click += label9_Click;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(568, 8);
+            label10.Name = "label10";
+            label10.Size = new Size(66, 15);
+            label10.TabIndex = 23;
+            label10.Text = "Light Color";
+            // 
+            // comboBoxLabChoice
+            // 
+            comboBoxLabChoice.FormattingEnabled = true;
+            comboBoxLabChoice.Items.AddRange(new object[] { "lab1", "lab2", "lab3", "lab4" });
+            comboBoxLabChoice.Location = new Point(113, 25);
+            comboBoxLabChoice.Name = "comboBoxLabChoice";
+            comboBoxLabChoice.Size = new Size(98, 23);
+            comboBoxLabChoice.TabIndex = 24;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(584, 581);
+            ClientSize = new Size(660, 581);
             Controls.Add(panel1);
             Controls.Add(pictureBox);
             KeyPreview = true;
@@ -263,5 +373,15 @@
         private Label label3;
         private Button buttonNastya;
         private Button buttonSkull;
+        private Button buttonLightColor;
+        private TextBox txtBoxColorB;
+        private TextBox txtBoxColorG;
+        private TextBox txtBoxColorR;
+        private Label label6;
+        private Label label7;
+        private Label label8;
+        private Label label9;
+        private ComboBox comboBoxLabChoice;
+        private Label label10;
     }
 }

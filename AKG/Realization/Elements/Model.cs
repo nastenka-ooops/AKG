@@ -35,7 +35,9 @@ namespace AKG.Realization.Elements
         public Vector3 Kd { get; set; }//рассеяное
         public Vector3 Ks { get; set; }//зеркальное
         public float Shininess { get; set; } // коэф блеска
-        
+
+        public Vector3 lightColor { get; set; } = new Vector3(0.9f, 0.9f, 0.9f);
+
         public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
         public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
 

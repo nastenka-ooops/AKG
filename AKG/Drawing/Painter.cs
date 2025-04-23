@@ -226,7 +226,142 @@ namespace AKG.Drawing
             _buffer.Flush();
         }
 
+        private void DrawTriangleWithPhongInterpolation(
+    Vector4 v0, Vector4 v1, Vector4 v2,
+    Vector3 n0, Vector3 n1, Vector3 n2,
+    Vector3 worldPos0, Vector3 worldPos1, Vector3 worldPos2,
+    Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess, Vector3 lightDir, Vector3 viewDir, Vector3 lightColor)
+        {
+            // Сортировка вершин по Y (v0.Y <= v1.Y <= v2.Y)
+            if (v0.Y > v2.Y) { (v0, v2) = (v2, v0); (n0, n2) = (n2, n0); (worldPos0, worldPos2) = (worldPos2, worldPos0); }
+            if (v0.Y > v1.Y) { (v0, v1) = (v1, v0); (n0, n1) = (n1, n0); (worldPos0, worldPos1) = (worldPos1, worldPos0); }
+            if (v1.Y > v2.Y) { (v1, v2) = (v2, v1); (n1, n2) = (n2, n1); (worldPos1, worldPos2) = (worldPos2, worldPos1); }
 
+            // Вычисление градиентов для координат X, Z и нормалей
+            var kv1 = (v2 - v0) / (v2.Y - v0.Y);
+            var kv2 = (v1 - v0) / (v1.Y - v0.Y);
+            var kv3 = (v2 - v1) / (v2.Y - v1.Y);
+
+            var kz1 = (v2.Z - v0.Z) / (v2.Y - v0.Y);
+            var kz2 = (v1.Z - v0.Z) / (v1.Y - v0.Y);
+            var kz3 = (v2.Z - v1.Z) / (v2.Y - v1.Y);
+
+            // Градиенты для нормалей
+            var kn1 = (n2 - n0) / (v2.Y - v0.Y);
+            var kn2 = (n1 - n0) / (v1.Y - v0.Y);
+            var kn3 = (n2 - n1) / (v2.Y - v1.Y);
+
+            // Градиенты для мировых позиций (для перспективно-корректной интерполяции)
+            var kwp1 = (worldPos2 - worldPos0) / (v2.Y - v0.Y);
+            var kwp2 = (worldPos1 - worldPos0) / (v1.Y - v0.Y);
+            var kwp3 = (worldPos2 - worldPos1) / (v2.Y - v1.Y);
+
+            // Границы по Y
+            var top = Math.Max(0, (int)Math.Ceiling(v0.Y));
+            var bottom = Math.Min(_buffer.height, (int)Math.Ceiling(v2.Y));
+
+            // Цикл по строкам
+            for (int y = top; y < bottom; y++)
+            {
+                // Определяем крайние точки
+                var av = v0 + (y - v0.Y) * kv1;
+                var bv = (y < v1.Y) ? v0 + (y - v0.Y) * kv2 : v1 + (y - v1.Y) * kv3;
+
+                // Значения z-буффера для крайних точек
+                var az = v0.Z + (y - v0.Y) * kz1;
+                var bz = y < v1.Y ? v0.Z + (y - v0.Y) * kz2 : v1.Z + (y - v1.Y) * kz3;
+
+                // Нормали для крайних точек
+                Vector3 aNormal = n0 + (y - v0.Y) * kn1;
+                Vector3 bNormal = y < v1.Y ? n0 + (y - v0.Y) * kn2 : n1 + (y - v1.Y) * kn3;
+
+                // Мировые позиции для крайних точек
+                Vector3 aWorldPos = worldPos0 + (y - v0.Y) * kwp1;
+                Vector3 bWorldPos = y < v1.Y ? worldPos0 + (y - v0.Y) * kwp2 : worldPos1 + (y - v1.Y) * kwp3;
+
+                // Упорядочиваем крайние точки
+                if (av.X > bv.X)
+                {
+                    (av, bv) = (bv, av);
+                    (az, bz) = (bz, az);
+                    (aNormal, bNormal) = (bNormal, aNormal);
+                    (aWorldPos, bWorldPos) = (bWorldPos, aWorldPos);
+                }
+
+                // Рисуем горизонтальную линию от av.X до bv.X
+                var left = Math.Max(0, (int)Math.Ceiling(av.X));
+                var right = Math.Min(_buffer.width, (int)Math.Ceiling(bv.X));
+
+                // Коэффициенты для интерполяции по X
+                var kz = (bv.X != av.X) ? (bz - az) / (bv.X - av.X) : 0;
+                var kNormal = (bv.X != av.X) ? (bNormal - aNormal) / (bv.X - av.X) : Vector3.Zero;
+                var kWorldPos = (bv.X != av.X) ? (bWorldPos - aWorldPos) / (bv.X - av.X) : Vector3.Zero;
+
+                for (int x = left; x < right; x++)
+                {
+                    var z = az + (x - av.X) * kz;
+                    Vector3 pixelNormal = Vector3.Normalize(aNormal + (x - av.X) * kNormal);
+                    Vector3 pixelWorldPos = aWorldPos + (x - av.X) * kWorldPos;
+
+                    // Вычисляем цвет по Фонгу для каждого пикселя
+                    Color pixelColor = CalculatePhongColor(
+                        new Vector4(pixelWorldPos, 1),
+                        pixelNormal,
+                        lightDir,
+                        viewDir,
+                        Ka, Kd, Ks, shininess, lightColor);
+
+                    if (_buffer.PutZValue(x, y, z))
+                        _buffer[x, y] = pixelColor;
+                }
+            }
+        }
+
+        public void PaintModelLaba3(Model model)
+        {
+            model.CalculateVertices(_buffer.width, _buffer.height);
+
+            var modelNormals = model.GetNormals();
+            foreach (var face in model.GetModelFaces())
+            {
+                var v0 = model.GetViewPortVertices()[face.Indices[0].VertexIndex - 1];
+                var v1 = model.GetViewPortVertices()[face.Indices[1].VertexIndex - 1];
+                var v2 = model.GetViewPortVertices()[face.Indices[2].VertexIndex - 1];
+
+                // Вычисляем нормаль треугольника (для backface culling)
+                var edge1 = v1 - v0;
+                var edge2 = v2 - v0;
+                var normal = Vector3.Normalize(Vector3.Cross(
+                    new Vector3(edge1.X, edge1.Y, edge1.Z),
+                    new Vector3(edge2.X, edge2.Y, edge2.Z)));
+
+                if (Vector3.Dot(normal, model.target) > 0)
+                {
+                    // Мировые координаты вершин
+                    var wv0 = model.GetWorldVertices()[face.Indices[0].VertexIndex - 1];
+                    var wv1 = model.GetWorldVertices()[face.Indices[1].VertexIndex - 1];
+                    var wv2 = model.GetWorldVertices()[face.Indices[2].VertexIndex - 1];
+
+                    var n0 = modelNormals[face.Indices[0].VertexIndex - 1];
+                    var n1 = modelNormals[face.Indices[1].VertexIndex - 1];
+                    var n2 = modelNormals[face.Indices[2].VertexIndex - 1];
+
+                    // Рисуем треугольник с интерполяцией нормалей (Phong shading)
+                    DrawTriangleWithPhongInterpolation(
+                        new Vector4(v0.X, v0.Y, wv0.Z, v0.W),
+                        new Vector4(v1.X, v1.Y, wv1.Z, v1.W),
+                        new Vector4(v2.X, v2.Y, wv2.Z, v2.W),
+                        n0, n1, n2,
+                        new Vector3(wv0.X, wv0.Y, wv0.Z),
+                        new Vector3(wv1.X, wv1.Y, wv1.Z),
+                        new Vector3(wv2.X, wv2.Y, wv2.Z),
+                        model.Ka, model.Kd, model.Ks, model.Shininess,
+                        model.lightDir, model.target, model.lightColor);
+                }
+            }
+
+            _buffer.Flush();
+        }
         private void DrawTriangleWithInterpolation(Vector4 v0, Vector4 v1, Vector4 v2, Color c0, Color c1, Color c2)
         {
             // Сортировка вершин по Y (v0.Y <= v1.Y <= v2.Y)
@@ -326,106 +461,31 @@ namespace AKG.Drawing
         }
 
         private Color CalculatePhongColor(Vector4 position4, Vector3 normal, Vector3 lightDir, Vector3 viewDir,
-            Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess)
+            Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess, Vector3 lightColor)
         {
             var position = new Vector3(position4.X, position4.Y, position4.Z);
-            //var normal = new Vector3(normal4.X, normal4.Y, normal4.Z);
-            // Нормализуем векторы
             normal = Vector3.Normalize(normal);
-            lightDir = Vector3.Normalize(-lightDir); // Инвертируем, т.к. lightDir обычно направлен ОТ источника
+            lightDir = Vector3.Normalize(-lightDir);
             viewDir = Vector3.Normalize(viewDir - position);
 
             // Фоновое освещение
-            Vector3 ambient = Ka * new Vector3(0.2f, 0.2f, 0.2f); // AmbientColor
-
+            Vector3 ambient = Ka * lightColor;
             // Рассеянное освещение
             float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
-            Vector3 diffuse = Kd * diff * new Vector3(1.0f, 1.0f, 1.0f); // LightColor
-
+            Vector3 diffuse = Kd * diff * lightColor;
             // Зеркальное освещение
             Vector3 reflectDir = Vector3.Reflect(-lightDir, normal);
             float spec = (float)Math.Pow(Math.Max(Vector3.Dot(viewDir, reflectDir), 0), shininess);
-            Vector3 specular = Ks * spec * new Vector3(1.0f, 1.0f, 1.0f); // LightColor
-
+            Vector3 specular = Ks * spec * lightColor;
             // Суммируем компоненты
             Vector3 finalColor = ambient + diffuse + specular;
 
             // Преобразуем в Color (ограничиваем значения 0-1)
             finalColor = Vector3.Clamp(finalColor, Vector3.Zero, Vector3.One);
             return Color.FromArgb(
-                (int)(finalColor.X * 255),
-                (int)(finalColor.Y * 255),
-                (int)(finalColor.Z * 255));
-        }
-
-        public void PaintModelLaba3(Model model)
-        {
-            model.CalculateVertices(_buffer.width, _buffer.height);
-            Light lighttmp = new Light
-            {
-                LightPosition = new Vector3(10f, 10f, 10f),
-                LightColor = new Vector3(1f, 1f, 1f),
-                AmbientColor = new Vector3(0.2f, 0.2f, 0.2f)
-            };
-            var modelNormals = model.GetNormals();
-            foreach (var face in model.GetModelFaces())
-            {
-                var v0 = model.GetViewPortVertices()[face.Indices[0].VertexIndex - 1];
-                var v1 = model.GetViewPortVertices()[face.Indices[1].VertexIndex - 1];
-                var v2 = model.GetViewPortVertices()[face.Indices[2].VertexIndex - 1];
-
-                // Вычисляем нормаль треугольника (для backface culling)
-                var edge1 = v1 - v0;
-                var edge2 = v2 - v0;
-                var normal = Vector3.Normalize(Vector3.Cross(
-                    new Vector3(edge1.X, edge1.Y, edge1.Z),
-                    new Vector3(edge2.X, edge2.Y, edge2.Z)));
-
-                if (Vector3.Dot(normal, model.target) > 0)
-                {
-                    // Мировые координаты вершин
-                    var wv0 = model.GetWorldVertices()[face.Indices[0].VertexIndex - 1];
-                    var wv1 = model.GetWorldVertices()[face.Indices[1].VertexIndex - 1];
-                    var wv2 = model.GetWorldVertices()[face.Indices[2].VertexIndex - 1];
-
-
-                    // Нормали вершин (должны быть предварительно рассчитаны в модели)
-
-                    //var vertex1 = face.Indices[0].VertexIndex;
-
-
-                    var n0 = modelNormals[face.Indices[0].VertexIndex - 1];
-                    var n1 = modelNormals[face.Indices[1].VertexIndex - 1];
-                    var n2 = modelNormals[face.Indices[2].VertexIndex - 1];
-
-                    // Цвета для каждой вершины по Фонгу
-                    Color c0 = CalculatePhongColor(wv0, n0, model.lightDir, model.target, model.Ka, model.Kd, model.Ks,
-                        model.Shininess);
-                    Color c1 = CalculatePhongColor(wv1, n1, model.lightDir, model.target, model.Ka, model.Kd, model.Ks,
-                        model.Shininess);
-                    Color c2 = CalculatePhongColor(wv2, n2, model.lightDir, model.target, model.Ka, model.Kd, model.Ks,
-                        model.Shininess);
-
-                    // красим 
-
-                    Color c00 = Color.FromArgb(255, (int)(c0.B * this.B / 255), (int)(c0.G * this.G / 255),
-                        (int)(c0.R * this.R / 255));
-                    Color c11 = Color.FromArgb(255, (int)(c1.B * this.B / 255), (int)(c1.G * this.G / 255),
-                        (int)(c1.R * this.R / 255));
-                    Color c22 = Color.FromArgb(255, (int)(c2.B * this.B / 255), (int)(c2.G * this.G / 255),
-                        (int)(c2.R * this.R / 255));
-
-
-                    // Рисуем треугольник с интерполяцией цветов
-                    DrawTriangleWithInterpolation(
-                        new Vector4(v0.X, v0.Y, wv0.Z, v0.W),
-                        new Vector4(v1.X, v1.Y, wv1.Z, v1.W),
-                        new Vector4(v2.X, v2.Y, wv2.Z, v2.W),
-                        c00, c11, c22);
-                }
-            }
-
-            _buffer.Flush();
+                (int)(finalColor.X * this.B),
+                (int)(finalColor.Y * this.G),
+                (int)(finalColor.Z * this.R));
         }
 
         public void PaintModelLaba4(Model model)
@@ -590,7 +650,8 @@ namespace AKG.Drawing
                         Ka,
                         Kd,
                         model.Ks,
-                        model.Shininess);
+                        model.Shininess,
+                        model.lightColor);
 
                     // Применяем основной цвет объекта
                     color = Color.FromArgb(

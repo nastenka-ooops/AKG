@@ -49,17 +49,35 @@ namespace AKG
         private void Repaint()
         {
             if (_model == null || _painter == null) return;
-
-            _painter.PaintModelLaba4(_model);
+            switch (comboBoxLabChoice.SelectedIndex)
+            {
+                case 0:
+                    _painter.PaintModelLaba1(_model);
+                    break;
+                case 1:
+                    _painter.PaintModelLaba2(_model);
+                    break;
+                case 2:
+                    _painter.PaintModelLaba3(_model);
+                    break;
+                case 3:
+                    _painter.PaintModelLaba4(_model);
+                    break;
+                default:
+                    _painter.PaintModelLaba4(_model);
+                    break;
+            }
+            
 
             pictureBox.Refresh();
         }
 
         private void buttonOpen_Click(object sender, EventArgs e)
         {
-            var openDialog = new OpenFileDialog() {
+            var openDialog = new OpenFileDialog()
+            {
                 Filter = "OBJ geometry format(*.obj)|*.obj",
-                InitialDirectory = "..\\..\\..\\Models" 
+                InitialDirectory = "..\\..\\..\\Models"
             };
             if (openDialog.ShowDialog() != DialogResult.OK) return;
             var path = openDialog.FileName;
@@ -254,6 +272,28 @@ namespace AKG
             textBoxScaleChange.Text = "0,001";
             ResizeImage();
             Repaint();
+        }
+
+        private void buttonLightColor_Click(object sender, EventArgs e)
+        {
+            int rr = Math.Clamp(int.Parse(txtBoxColorR.Text), 0, 255);
+            int gg = Math.Clamp(int.Parse(txtBoxColorG.Text), 0, 255);
+            int bb = Math.Clamp(int.Parse(txtBoxColorB.Text), 0, 255);
+            float r = (float)rr / 255;
+            float g = (float)gg / 255;
+            float b = (float)bb / 255;
+            _model.lightColor = new Vector3(b, g, r);
+            Repaint();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
