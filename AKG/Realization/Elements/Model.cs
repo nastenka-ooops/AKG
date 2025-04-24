@@ -40,7 +40,7 @@ namespace AKG.Realization.Elements
 
         public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
         public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
-
+        public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
         public void setDefaultMaterial()
         {
             this.Ka = new Vector3(0.1f, 0.1f, 0.1f);
@@ -103,8 +103,55 @@ namespace AKG.Realization.Elements
                     MatrixTransformations.TransformToViewportMatrix(_perspectiveVertices[i], width, height, 0, 0);
             });
         }
+        private List<Vector2> _modelTextureCoordinates2;
+        public List<Vector2> GetTextureCoords()
+        {
+           
+            // Если есть явные текстурные координаты, возвращаем их
+            if (_modelTextureCoordinates != null && _modelTextureCoordinates.Count > 0)
+            {
+                List<Vector2> _modelTextureCoordinates2 = new List<Vector2>();
+                foreach (Vector3 v in  _modelTextureCoordinates)
+                    _modelTextureCoordinates2.Add(new Vector2(v.X, v.Y));
+                return _modelTextureCoordinates2;
+            }
 
+            // Если нет - создаем список, где каждая вершина имеет UV-координаты
+            var textureCoords = new List<Vector2>(_modelVertices.Count);
 
+            // Вычисляем bounding box модели
+            float minX = float.MaxValue, maxX = float.MinValue;
+            float minY = float.MaxValue, maxY = float.MinValue;
+            float minZ = float.MaxValue, maxZ = float.MinValue;
+
+            foreach (var vertex in _modelVertices)
+            {
+                minX = Math.Min(minX, vertex.X);
+                maxX = Math.Max(maxX, vertex.X);
+                minY = Math.Min(minY, vertex.Y);
+                maxY = Math.Max(maxY, vertex.Y);
+                minZ = Math.Min(minZ, vertex.Z);
+                maxZ = Math.Max(maxZ, vertex.Z);
+            }
+
+            // Генерируем UV-координаты на основе положения вершин
+            foreach (var vertex in _modelVertices)
+            {
+                // Нормализуем координаты к [0, 1] диапазону
+                float u = (vertex.X - minX) / (maxX - minX);
+                float v = (vertex.Y - minY) / (maxY - minY);
+
+                // Альтернативный вариант - сферические координаты
+                // Vector3 normal = new Vector3(vertex.X, vertex.Y, vertex.Z);
+                // normal = Vector3.Normalize(normal);
+                // float u = 0.5f + (float)(Atan2(normal.Z, normal.X) / (2 * PI));
+                // float v = 0.5f - (float)(Asin(normal.Y) / PI);
+
+                textureCoords.Add(new Vector2(u, v));
+            }
+
+            return textureCoords;
+        }
         public List<Vector3> GetNormals()
         {
 

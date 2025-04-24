@@ -9,6 +9,7 @@ namespace AKG
 {
     public partial class MainForm : Form
     {
+        private bool mode = true;
         private float ScaleChange = 0.01f;
         private const float ShiftChange = 1f;
 
@@ -117,19 +118,31 @@ namespace AKG
             switch (e.KeyCode)
             {
                 case Keys.W:
-                    _model.ShiftY -= ShiftChange;
+                    if (mode)
+                        _model.ShiftY -= ShiftChange;
+                    else
+                        _model.lightDir.X = Math.Clamp(_model.lightDir.X + 0.05f, -1, 1);
                     Repaint();
                     break;
                 case Keys.S:
+                    if(mode)
                     _model.ShiftY += ShiftChange;
+                    else
+                        _model.lightDir.X = Math.Clamp(_model.lightDir.X - 0.05f, -1, 1);
                     Repaint();
                     break;
                 case Keys.A:
+                    if (mode)
                     _model.ShiftX -= ShiftChange;
+                    else
+                        _model.lightDir.Y = Math.Clamp(_model.lightDir.Y + 0.05f, -1, 1);
                     Repaint();
                     break;
                 case Keys.D:
+                    if(mode)
                     _model.ShiftX += ShiftChange;
+                    else
+                        _model.lightDir.Y = Math.Clamp(_model.lightDir.Y - 0.05f, -1, 1);
                     Repaint();
                     break;
                 case Keys.J:
@@ -158,10 +171,12 @@ namespace AKG
                     {
                         _model.Scale = 0.001f;
                     }
-
                     Repaint();
-
                     break;
+                case Keys.M:
+                    mode = !mode;
+                    break;
+               
             }
 
         }
@@ -264,6 +279,9 @@ namespace AKG
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
             _model.Scale = 0.09f;
+            _model.DiffuseMap = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
+            _model.NormalMap = new Bitmap("../../../Models/normal-maps/craneo.jpg");
+            _model.SpecularMap = new Bitmap("../../../Models/specular-maps/craneo2.jpg");
             ScaleChange = 0.001f;
             _model.setDefaultMaterial();
             _model.RotationOfXInRadians = 0f;
