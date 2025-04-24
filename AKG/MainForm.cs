@@ -281,8 +281,8 @@ namespace AKG
             _model.Scale = 0.09f;
             _model.DiffuseMap = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
             _model.NormalMap = new Bitmap("../../../Models/normal-maps/craneo.jpg");
-            _model.SpecularMap = new Bitmap("../../../Models/specular-maps/craneo2.jpg");
-            ScaleChange = 0.001f;
+            _model.SpecularMap = new Bitmap("../../../Models/specular-maps/craneo.jpg");
+            ScaleChange = 0.01f;
             _model.setDefaultMaterial();
             _model.RotationOfXInRadians = 0f;
             _model.RotationOfYInRadians = 0f;

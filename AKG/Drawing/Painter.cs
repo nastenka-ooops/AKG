@@ -497,7 +497,7 @@ namespace AKG.Drawing
         }
         #endregion
 
-        #region asdasdsadadas
+        /*#region asdasdsadadas
         public void PaintModelLaba4(Model model)
         {
             // Вычисляем вершины модели в мировом пространстве
@@ -622,7 +622,8 @@ namespace AKG.Drawing
                     var pixelNormal = Vector3.Normalize(aNormal + (x - av.X) * kNormal);
 
                     // Получаем цвет из текстур
-                    Color diffuseColor = SampleTexture(diffuseMap, uv);
+                    //Color diffuseColor = SampleTexture(diffuseMap, uv);
+                    Color diffuseColor = (Color.Brown);
                     Color normalColor = SampleTexture(normalMap, uv);
                     Color specularColor = SampleTexture(specularMap, uv);
 
@@ -688,7 +689,7 @@ namespace AKG.Drawing
                 (int)(finalColor.Y * 255),
                 (int)(finalColor.Z * 255));
         }
-        #endregion
+        #endregion*/
 
 
         /*#region try 3
@@ -835,7 +836,7 @@ namespace AKG.Drawing
         #endregion*/
 
 
-        /*#region 4 laba tmp
+        #region 4 laba tmp
 
 
 
@@ -848,7 +849,7 @@ namespace AKG.Drawing
             viewDir = Vector3.Normalize(viewDir - position);
 
             // Фоновое освещение
-            Vector3 ambient = Ka * lightColor * 0.1f;
+            Vector3 ambient = Ka * lightColor ;
             // Рассеянное освещение
             float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
             Vector3 diffuse = Kd * diff * lightColor;
@@ -862,9 +863,9 @@ namespace AKG.Drawing
             // Преобразуем в Color (ограничиваем значения 0-1)
             finalColor = Vector3.Clamp(finalColor, Vector3.Zero, Vector3.One);
             return Color.FromArgb(
-                (int)(finalColor.X * lightColor.Z * 255),
+                (int)(finalColor.Z * lightColor.Z * 255),
                 (int)(finalColor.Y * lightColor.Y * 255),
-                (int)(finalColor.Z * lightColor.X * 255));
+                (int)(finalColor.X * lightColor.X * 255));
         }
         public void PaintModelLaba4(Model model)
         {
@@ -908,29 +909,29 @@ namespace AKG.Drawing
         }
 
         private void DrawTexturedTriangle(Vector4 v0, Vector4 v1, Vector4 v2,
-            Vector3 uv0, Vector3 uv1, Vector3 uv2,
-            Model model)
+    Vector3 uv0, Vector3 uv1, Vector3 uv2,
+    Model model)
         {
             // Сортировка вершин по Y
             if (v0.Y > v2.Y) { (v0, v2) = (v2, v0); (uv0, uv2) = (uv2, uv0); }
             if (v0.Y > v1.Y) { (v0, v1) = (v1, v0); (uv0, uv1) = (uv1, uv0); }
             if (v1.Y > v2.Y) { (v1, v2) = (v2, v1); (uv1, uv2) = (uv2, uv1); }
 
-            // Градиенты для координат с учетом перспективы
-            var deltaY = v2.Y - v0.Y;
+            // Вычисляем градиенты для координат X, Z и 1/W (для перспективно-корректной интерполяции)
+            float deltaY = v2.Y - v0.Y;
             var kv1 = deltaY != 0 ? (v2 - v0) / deltaY : Vector4.Zero;
             var kuv1 = deltaY != 0 ? (uv2 / v2.W - uv0 / v0.W) / deltaY : Vector3.Zero;
-            var kz1 = deltaY != 0 ? (1 / v2.W - 1 / v0.W) / deltaY : 0;
+            var kInvW1 = deltaY != 0 ? (1 / v2.W - 1 / v0.W) / deltaY : 0f;
 
             deltaY = v1.Y - v0.Y;
             var kv2 = deltaY != 0 ? (v1 - v0) / deltaY : Vector4.Zero;
             var kuv2 = deltaY != 0 ? (uv1 / v1.W - uv0 / v0.W) / deltaY : Vector3.Zero;
-            var kz2 = deltaY != 0 ? (1 / v1.W - 1 / v0.W) / deltaY : 0;
+            var kInvW2 = deltaY != 0 ? (1 / v1.W - 1 / v0.W) / deltaY : 0f;
 
             deltaY = v2.Y - v1.Y;
             var kv3 = deltaY != 0 ? (v2 - v1) / deltaY : Vector4.Zero;
             var kuv3 = deltaY != 0 ? (uv2 / v2.W - uv1 / v1.W) / deltaY : Vector3.Zero;
-            var kz3 = deltaY != 0 ? (1 / v2.W - 1 / v1.W) / deltaY : 0;
+            var kInvW3 = deltaY != 0 ? (1 / v2.W - 1 / v1.W) / deltaY : 0f;
 
             // Границы растеризации
             var top = Math.Max(0, (int)Math.Ceiling(v0.Y));
@@ -940,7 +941,7 @@ namespace AKG.Drawing
             {
                 Vector4 av, bv;
                 Vector3 auvPersp, buvPersp;
-                float az, bz;
+                float aInvW, bInvW;
 
                 if (y < v1.Y)
                 {
@@ -949,8 +950,8 @@ namespace AKG.Drawing
                     bv = v0 + t * kv2;
                     auvPersp = uv0 / v0.W + t * kuv1;
                     buvPersp = uv0 / v0.W + t * kuv2;
-                    az = 1 / v0.W + t * kz1;
-                    bz = 1 / v0.W + t * kz2;
+                    aInvW = 1 / v0.W + t * kInvW1;
+                    bInvW = 1 / v0.W + t * kInvW2;
                 }
                 else
                 {
@@ -959,15 +960,15 @@ namespace AKG.Drawing
                     bv = v0 + (y - v0.Y) * kv1;
                     auvPersp = uv1 / v1.W + t * kuv3;
                     buvPersp = uv0 / v0.W + (y - v0.Y) * kuv1;
-                    az = 1 / v1.W + t * kz3;
-                    bz = 1 / v0.W + (y - v0.Y) * kz1;
+                    aInvW = 1 / v1.W + t * kInvW3;
+                    bInvW = 1 / v0.W + (y - v0.Y) * kInvW1;
                 }
 
                 if (av.X > bv.X)
                 {
                     (av, bv) = (bv, av);
                     (auvPersp, buvPersp) = (buvPersp, auvPersp);
-                    (az, bz) = (bz, az);
+                    (aInvW, bInvW) = (bInvW, aInvW);
                 }
 
                 var left = Math.Max(0, (int)Math.Ceiling(av.X));
@@ -978,8 +979,9 @@ namespace AKG.Drawing
                 for (int x = left; x < right; x++)
                 {
                     var t = (x - av.X) * k;
-                    var z = 1 / (az * (1 - t) + bz * t);
-
+                    var invW = aInvW * (1 - t) + bInvW * t;
+                    var z = 1 / invW; // Корректное значение глубины
+                  
                     // Перспективно-корректные UV
                     var uvPersp = auvPersp * (1 - t) + buvPersp * t;
                     var uv = uvPersp * z;
@@ -987,17 +989,16 @@ namespace AKG.Drawing
                     // Получаем данные из текстур
                     var texColor = GetTextureColor(model.DiffuseMap, uv.X, uv.Y);
                     var normal = GetNormalFromMap(model.NormalMap, uv.X, uv.Y);
-
                     var specular = GetSpecularIntensity(model.SpecularMap, uv.X, uv.Y);
 
                     // Преобразование нормали
                     normal = Vector3.Normalize(normal * 2 - Vector3.One);
-                    //normal = new Vector3(normal.X * 2 - 1, 1 - normal.Y * 2, normal.Z * 2 - 1);
+
                     // Расчет освещения
                     var Ka = new Vector3(texColor.R / 255f, texColor.G / 255f, texColor.B / 255f);
                     var color = CalculatePhongColor2(
-                        new Vector4(x, y, av.Z + t * (bv.Z - av.Z), 1),
-                        normal,
+                        new Vector4(x, y, z, 1), // Используем корректное значение z
+                        normal, 
                         model.lightDir,
                         model.target,
                         Ka,
@@ -1005,9 +1006,9 @@ namespace AKG.Drawing
                         new Vector3(specular),
                         model.Shininess,
                         model.lightColor);
-
-                    // Запись в буфер
-                    if (_buffer.PutZValue(x, y, z))
+                   
+                    // Запись в буфер (используем z для проверки глубины)
+                    if (_buffer.PutZValue(x, y, 1/z))
                         _buffer[x, y] = color;
                 }
             }
@@ -1052,9 +1053,9 @@ namespace AKG.Drawing
                 color.B / 255f);
         }
         // Остальные методы без изменений
-        #endregion*/
+        #endregion
 
-        /* #region Четвертая лаба
+         /*#region Четвертая лаба
          public void PaintModelLaba4(Model model)
          {
              model.CalculateVertices(_buffer.width, _buffer.height);
@@ -1190,14 +1191,27 @@ namespace AKG.Drawing
                      // Интерполируем Z
                      var z = av.Z + (bv.Z - av.Z) * t;
 
-                     // Интерполируем нормаль
-                     //var normal = Vector3.Normalize(an + (bn - an) * t);
+                    // Интерполируем нормаль
+                    //var normal = Vector3.Normalize(an + (bn - an) * t);
 
-                     // Интерполируем UV
-                     var uv = auv + (buv - auv) * t;
+                    // Интерполируем UV
+                    //var uv = auv + (buv - auv) * t;
 
-                     // Получаем цвет из текстуры
-                     var texColor = GetTextureColor(model.DiffuseMap, uv.X, uv.Y);
+
+                    var auv_div_z = auv / av.Z;  // uv0 / z0
+                    var buv_div_z = buv / bv.Z;  // uv1 / z1
+                    var a_inv_z = 1.0f / av.Z;   // 1 / z0
+                    var b_inv_z = 1.0f / bv.Z;   // 1 / z1
+
+                    // 2. Линейно интерполируем (uv/z) и (1/z)
+                    var uv_div_z_interp = auv_div_z + (buv_div_z - auv_div_z) * t;  // (1-t)*(uv0/z0) + t*(uv1/z1)
+                    var inv_z_interp = a_inv_z + (b_inv_z - a_inv_z) * t;           // (1-t)*(1/z0) + t*(1/z1)
+
+                    // 3. Восстанавливаем uv: uv = (uv/z) / (1/z)
+                    var uv = uv_div_z_interp / inv_z_interp;
+
+                    // Получаем цвет из текстуры
+                    var texColor = GetTextureColor(model.DiffuseMap, uv.X, uv.Y);
 
                      // Используем цвет текстуры как kd и ka
                      var Ka = new Vector3(texColor.R / 255f, texColor.G / 255f, texColor.B / 255f);

@@ -34,6 +34,7 @@ namespace AKG.Realization
         {
             var transformVertex = Transform(vertex, Matrix4x4.CreatePerspectiveFieldOfView(
                 fov, aspect, zFar, zNear));
+            return transformVertex;
             return new Vector4(transformVertex.X / transformVertex.W, transformVertex.Y / transformVertex.W,
                 transformVertex.Z / transformVertex.W, transformVertex.W / transformVertex.W);
         }
