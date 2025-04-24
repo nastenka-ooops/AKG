@@ -39,8 +39,11 @@ namespace AKG.Realization.Elements
         public Vector3 lightColor { get; set; } = new Vector3(0.9f, 0.9f, 0.9f);
 
         public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
+        //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
         public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
+        //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/craneo.jpg");
         public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
+       // public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/craneo.jpg");
         public void setDefaultMaterial()
         {
             this.Ka = new Vector3(0.1f, 0.1f, 0.1f);
@@ -55,7 +58,7 @@ namespace AKG.Realization.Elements
         public Vector3 lightDir = new Vector3(0, -1, 0);
         public float zFar = 100;
         public float zNear;
-        public float Fov = (float)(20 * PI / 180);
+        public float Fov = (float)( PI / 3);
 
         public Model(List<Vector4> modelVertices, List<Vector3> modelTextureCoordinates,
             List<Normal> modelNormals,
@@ -93,14 +96,14 @@ namespace AKG.Realization.Elements
 
             var res = Parallel.For(0, _modelVertices.Count, i =>
             {
-                _worldVertices[i] = MatrixTransformations.TransformToWordMatrix(_modelVertices[i], ShiftX, ShiftY,
+                var matrix = MatrixTransformations.GetWordMatrix(ShiftX, ShiftY,
                     ShiftZ,
-                    RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale);
-                _viewVertices[i] = MatrixTransformations.TransformToViewMatrix(_worldVertices[i], eye, target, up);
-                _perspectiveVertices[i] = MatrixTransformations.TransformToPerspectiveProjectionMatrix(
-                    _viewVertices[i], Fov, aspect, zNear, zFar);
-                _viewportVertices[i] =
-                    MatrixTransformations.TransformToViewportMatrix(_perspectiveVertices[i], width, height, 0, 0);
+                    RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
+                * MatrixTransformations.GetViewMatrix(eye, target, up)
+                * MatrixTransformations.GetPerspectiveProjectionMatrix(Fov, aspect, zNear, zFar)
+                * MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
+                _viewportVertices[i] = MatrixTransformations.Transform(_modelVertices[i], matrix);
+        
             });
         }
         private List<Vector2> _modelTextureCoordinates2;
@@ -140,12 +143,6 @@ namespace AKG.Realization.Elements
                 // Нормализуем координаты к [0, 1] диапазону
                 float u = (vertex.X - minX) / (maxX - minX);
                 float v = (vertex.Y - minY) / (maxY - minY);
-
-                // Альтернативный вариант - сферические координаты
-                // Vector3 normal = new Vector3(vertex.X, vertex.Y, vertex.Z);
-                // normal = Vector3.Normalize(normal);
-                // float u = 0.5f + (float)(Atan2(normal.Z, normal.X) / (2 * PI));
-                // float v = 0.5f - (float)(Asin(normal.Y) / PI);
 
                 textureCoords.Add(new Vector2(u, v));
             }

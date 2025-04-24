@@ -278,7 +278,7 @@ namespace AKG
             ObjParser objParser = new ObjParser();
             _model = objParser.Parse(path);
             _model.UpdateModelInfo(new Vector3(0, 0, 1), new Vector3(0, 0, -1), new Vector3(0, 1, 0));
-            _model.Scale = 0.09f;
+            _model.Scale = 0.26f;
             _model.DiffuseMap = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
             _model.NormalMap = new Bitmap("../../../Models/normal-maps/craneo.jpg");
             _model.SpecularMap = new Bitmap("../../../Models/specular-maps/craneo.jpg");
