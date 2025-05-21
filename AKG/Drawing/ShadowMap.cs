@@ -21,7 +21,7 @@ public class ShadowMap
 
     public void ClearDepthBuffer()
     {
-        Array.Fill(_depthBuffer, float.MinValue);
+        Array.Fill(_depthBuffer, float.MaxValue);
     }
 
     public void RenderDepthMap(Model model)
@@ -111,7 +111,7 @@ public class ShadowMap
     private void SetDepth(int x, int y, float depth)
     {
         int index = y * _width + x;
-        if (depth > _depthBuffer[index])
+        if (depth < _depthBuffer[index])
         {
             _depthBuffer[index] = depth;
         }

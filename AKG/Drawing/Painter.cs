@@ -778,13 +778,10 @@ namespace AKG.Drawing
 
         private void RenderShadowMapPass(Model model)
         {
-            Matrix4x4 lightViewProjection = model.GetLightViewProjectionMatrix(_shadowMapSize, _shadowMapSize);
-
-            // Рассчитываем вершины с точки зрения источника света
-            model.CalculateVerticesForShadowMap(_shadowMapSize, _shadowMapSize, lightViewProjection);
-
-            // Очищаем shadow map
-            _shadowMap.ClearDepthBuffer();
+            _shadowMap.RenderDepthMap(model);
+            SaveToFile();
+            /*// Очищаем shadow map
+            _shadowMap.ClearDepthBuffer();*/
         }
 
         private void RenderMainPass(Model model)
@@ -926,22 +923,94 @@ namespace AKG.Drawing
 
                     // Расчет освещения
                     var Ka = new Vector3(texColor.R / 255f, texColor.G / 255f, texColor.B / 255f);
-                    var color = CalculatePhongColor2(
+                    var color = CalculatePhongColorWithShadow2(
                         new Vector4(x, y, z, 1), // Используем корректное значение z
-                        normal,
-                        model.lightDir,
-                        model.target,
-                        Ka,
-                        Ka,
-                        new Vector3(specular),
-                        model.Shininess,
-                        model.lightColor);
-
+                        normal, model.lightDir, model.target,
+                        Ka, Ka, new Vector3(specular), model.Shininess, 
+                        model.lightColor,
+                        _shadowMap,
+                        model.DiffuseMap,
+                        model.NormalMap,
+                        model.SpecularMap,
+                        new Vector2(uv.X, uv.Y));
+                    
                     // Запись в буфер (используем z для проверки глубины)
                     if (_buffer.PutZValue(x, y, 1 / z))
                         _buffer[x, y] = color;
                 }
             }
+        }
+
+        private Color CalculatePhongColorWithShadow2(
+            Vector4 position4,
+            Vector3 normal,
+            Vector3 lightDir,
+            Vector3 viewDir,
+            Vector3 Ka,
+            Vector3 Kd,
+            Vector3 Ks,
+            float shininess,
+            Vector3 lightColor,
+            ShadowMap shadowMap, // Добавляем shadow map
+            Bitmap diffuseMap = null, // Опциональная диффузная текстура
+            Bitmap normalMap = null, // Опциональная normal map
+            Bitmap specularMap = null, // Опциональная specular map
+            Vector2 uv = default) // Текстурные координаты
+        {
+            var position = new Vector3(position4.X, position4.Y, position4.Z);
+
+            // Нормализуем векторы
+            normal = Vector3.Normalize(normal);
+            lightDir = Vector3.Normalize(-lightDir);
+            viewDir = Vector3.Normalize(viewDir - position);
+
+            // Получаем shadow factor
+            float shadowFactor = shadowMap.GetShadowFactor(position4);
+
+            // Цвет из текстуры или белый по умолчанию
+            Vector3 baseColor = Vector3.One;
+            if (diffuseMap != null)
+            {
+                Color texColor = GetTextureColor(diffuseMap, uv.X, uv.Y);
+                baseColor = new Vector3(texColor.R, texColor.G, texColor.B) / 255.0f;
+            }
+
+            // Коррекция нормали с помощью normal map (если есть)
+            if (normalMap != null)
+            {
+                Vector3 texNormal = GetNormalFromMap(normalMap, uv.X, uv.Y);
+                texNormal = Vector3.Normalize(texNormal * 2 - Vector3.One); // [0,1] -> [-1,1]
+                normal = Vector3.Normalize(normal + texNormal);
+            }
+
+            // Интенсивность зеркального отражения из specular map (если есть)
+            float specularIntensity = 1.0f;
+            if (specularMap != null)
+            {
+                specularIntensity = GetSpecularIntensity(specularMap, uv.X, uv.Y);
+            }
+
+            // Фоновое освещение (не зависит от теней)
+            Vector3 ambient = Ka * lightColor * baseColor;
+
+            // Рассеянное освещение (учитывает тени)
+            float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
+            Vector3 diffuse = Kd * diff * lightColor * baseColor * shadowFactor;
+
+            // Зеркальное освещение (учитывает тени)
+            Vector3 reflectDir = Vector3.Reflect(-lightDir, normal);
+            float spec = (float)Math.Pow(Math.Max(Vector3.Dot(viewDir, reflectDir), 0), shininess);
+            Vector3 specular = Ks * spec * lightColor * shadowFactor * specularIntensity;
+
+            // Суммируем компоненты
+            Vector3 finalColor = ambient + diffuse + specular;
+            finalColor = Vector3.Clamp(finalColor, Vector3.Zero, Vector3.One);
+
+            // Преобразуем в Color с учетом настроек R,G,B
+            return Color.FromArgb(
+                (int)(finalColor.X * R),
+                (int)(finalColor.Y * G),
+                (int)(finalColor.Z * B));
         }
 
         private Color CalculatePixelColorWithShadows(
