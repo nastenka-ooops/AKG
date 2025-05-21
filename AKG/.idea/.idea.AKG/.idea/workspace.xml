@@ -9,17 +9,16 @@
   <component name="ChangeListManager">
     <list default="true" id="dd0a393e-b8c6-4340-bc02-58324722a279" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AKG.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/AKG.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AKG.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/AKG.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawing/BuffBitmap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/BuffBitmap.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawing/Painter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/Painter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MainForm.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/craneo.OBJ" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Realization/Elements/Model.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Realization/Elements/Model.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Realization/ObjParaser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Realization/ObjParaser.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.runtimeconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.runtimeconfig.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/tmp.png" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/tmp.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/AKG.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AKG.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/AKG.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AKG.csproj.nuget.g.props" afterDir="false" />
@@ -66,6 +65,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1f2f0b08d2574f1aa35973d1cd0ae347cef920/17/9606b5a0/Control.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1f2f0b08d2574f1aa35973d1cd0ae347cef920/b6/b9864440/NativeWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/211e6f3b24fa438a92f1815153647ce2c8f908/8e/00790cc9/Vector3.cs" root0="FORCE_HIGHLIGHTING" />
@@ -73,6 +74,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ef7e03ede4ac4f90a806cf587e874b52208a0/42/71813ca3/KnownColor.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/261ea83c988816e3d8fe76b15b7ac6c10af64b8f9e739854f83c137c8ba9/SafeFileHandle.Windows.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/2c8e7ca976f350cba9836d5565dac56b11e0b56656fa786460eb1395857a6fa/ThrowHelper.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/32f3c5fbd60f04a2e9843a91626f17753998cadc7bb87ae1e5e35bbfc113129/Math.CoreCLR.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/5578eef57b7ff54091a080aa54d6d69d8e88389f1b97fbb538853a394cdd3e46/MathF.CoreCLR.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6ef8e7d549f6bfb5b9eafaaa0ff48d8cbfc564f32be26323b5f60e63aef4dd1/SafeFileHandle.Windows.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/72e5853ed6f2c1967eff9d6f0cf6ba12744c8978c516cbc5e74d992944ab/ArgumentOutOfRangeException.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ab9ab828d5fbbcad19820633b84af5d42a35924e6f5ce58ee698bca4522ad/Vector4.cs" root0="FORCE_HIGHLIGHTING" />
@@ -84,6 +87,12 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/de7e5d9f3eff8e93316bbae6f9743ff9f72884862e5d612aaaba84bf9aa3a8/NativeWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/e68b3be647d57a34b98df1b515c4f8288fbace6ef9534c63ecaa6798fa3d4e2/Bitmap.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/ed6aa59cd75423c5b655901d6ec4fb4be48ab669fa6fb01b3a7a7f31be95/Matrix4x4.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://diff.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
@@ -97,20 +106,20 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.AKG.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.AKG.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="AKG" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" />
@@ -149,7 +158,9 @@
       <workItem from="1743424079821" duration="313000" />
       <workItem from="1743926736495" duration="597000" />
       <workItem from="1744641107709" duration="68000" />
-      <workItem from="1745231844248" duration="5668000" />
+      <workItem from="1745231844248" duration="19301000" />
+      <workItem from="1746646735673" duration="48000" />
+      <workItem from="1747219461343" duration="12538000" />
     </task>
     <task id="LOCAL-00001" summary="refactoring">
       <option name="closed" value="true" />
@@ -183,7 +194,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741615203074</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="half of 4th laba">
+      <option name="closed" value="true" />
+      <created>1745237911404</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1745237911404</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -202,7 +221,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="origin/main" />
                       </list>
                     </value>
                   </entry>
@@ -220,7 +239,8 @@
     <MESSAGE value="бебебе" />
     <MESSAGE value="lapa 2 almost done" />
     <MESSAGE value="lapa 2, now it's full done" />
-    <option name="LAST_COMMIT_MESSAGE" value="lapa 2, now it's full done" />
+    <MESSAGE value="half of 4th laba" />
+    <option name="LAST_COMMIT_MESSAGE" value="half of 4th laba" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -230,6 +250,71 @@
           <line>9</line>
           <properties documentPath="C:\BSUIR\AKGv2\AKG\AKG\Program.cs" containingFunctionPresentation="Method 'Main'" />
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Realization/Elements/Model.cs</url>
+          <line>231</line>
+          <properties documentPath="C:\BSUIR\AKGv2\AKG\Realization\Elements\Model.cs" containingFunctionPresentation="Method 'GetLightViewProjectionMatrix'">
+            <startOffsets>
+              <option value="9854" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9893" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Realization/Elements/Model.cs</url>
+          <line>248</line>
+          <properties documentPath="C:\BSUIR\AKGv2\AKG\Realization\Elements\Model.cs" containingFunctionPresentation="Method 'GetLightViewProjectionMatrix'">
+            <startOffsets>
+              <option value="10604" />
+            </startOffsets>
+            <endOffsets>
+              <option value="10680" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Realization/Elements/Model.cs</url>
+          <line>257</line>
+          <properties documentPath="C:\BSUIR\AKGv2\AKG\Realization\Elements\Model.cs" containingFunctionPresentation="Method 'GetLightViewProjectionMatrix'">
+            <startOffsets>
+              <option value="10964" />
+            </startOffsets>
+            <endOffsets>
+              <option value="11137" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint type="DotNet Breakpoints">
+          <url>file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c628921366b3915c1f443fdb5d3c1218593245e9f08e27a5b9f98c201220616d/Matrix4x4.Impl.cs</url>
+          <line>428</line>
+          <properties documentPath="C:\Users\Admin\AppData\Roaming\JetBrains\Rider2024.3\resharper-host\SourcesCache\c628921366b3915c1f443fdb5d3c1218593245e9f08e27a5b9f98c201220616d\Matrix4x4.Impl.cs" containingFunctionPresentation="Method 'CreateLookTo'">
+            <startOffsets>
+              <option value="15436" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15488" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint type="DotNet Breakpoints">
+          <url>file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c628921366b3915c1f443fdb5d3c1218593245e9f08e27a5b9f98c201220616d/Matrix4x4.Impl.cs</url>
+          <line>429</line>
+          <properties documentPath="C:\Users\Admin\AppData\Roaming\JetBrains\Rider2024.3\resharper-host\SourcesCache\c628921366b3915c1f443fdb5d3c1218593245e9f08e27a5b9f98c201220616d\Matrix4x4.Impl.cs" containingFunctionPresentation="Method 'CreateLookTo'">
+            <startOffsets>
+              <option value="15505" />
+            </startOffsets>
+            <endOffsets>
+              <option value="15577" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

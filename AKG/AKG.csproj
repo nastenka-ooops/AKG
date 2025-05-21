@@ -23,4 +23,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\shadow-maps\" />
+  </ItemGroup>
+
 </Project>

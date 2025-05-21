@@ -64,7 +64,7 @@ namespace AKG.Drawing
         public bool PutZValue(int x, int y, double z)
         {
             double existedZ = zBuffer[x, y];
-            if (existedZ < z)
+            if (existedZ <= z)
             {
                 zBuffer[x, y] = z;
                 return true;
@@ -72,8 +72,16 @@ namespace AKG.Drawing
 
             return false;
         }
+        
+        public double GetZValue(int x, int y)
+        {
+            if (x < 0 || x >= width || y < 0 || y >= height)
+                return float.MaxValue;
+            
+            return zBuffer[x, y];
+        }
 
-        private void Reset()
+        public void Reset()
         {
             Array.Fill<byte>(_buffer, 255);
             for (int i = 0; i < height; i++)

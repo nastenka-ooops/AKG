@@ -10,7 +10,7 @@ namespace AKG.Realization
         {
             List<Vector4> Vertices = new List<Vector4>();
             List<Vector3> TextureCoordinates = new List<Vector3>();
-            List<Normal> Normals = new List<Normal>();
+            List<Vector3> Normals = new List<Vector3>();
             List<Face> Faces = new List<Face>();
 
             foreach (var line in File.ReadLines(filePath))
@@ -36,7 +36,7 @@ namespace AKG.Realization
                         break;
 
                     case "vn":
-                        Normals.Add(new Normal(
+                        Normals.Add(new Vector3(
                             float.Parse(parts[1], CultureInfo.InvariantCulture),
                             float.Parse(parts[2], CultureInfo.InvariantCulture),
                             float.Parse(parts[3], CultureInfo.InvariantCulture)));

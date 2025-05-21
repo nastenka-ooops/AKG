@@ -17,8 +17,9 @@ namespace AKG.Realization.Elements
         private readonly List<Vector4> _viewVertices;
         private readonly List<Vector4> _perspectiveVertices;
         private readonly List<Vector4> _viewportVertices;
+        private readonly List<Vector4> _shadowVertices;
         private readonly List<Vector3> _modelTextureCoordinates;
-        private readonly List<Normal> _modelNormals;
+        private readonly List<Vector3> _modelNormals;
         private readonly List<Face> _modelFaces;
 
         public float ShiftX { get; set; } = 0;
@@ -55,13 +56,13 @@ namespace AKG.Realization.Elements
         public Vector3 eye;
         public Vector3 target;
         public Vector3 up;
-        public Vector3 lightDir = new Vector3(0, -1, 0);
+        public Vector3 lightDir = new Vector3(0, -1, 1);
         public float zFar = 100;
         public float zNear;
         public float Fov = (float)( PI / 3);
 
         public Model(List<Vector4> modelVertices, List<Vector3> modelTextureCoordinates,
-            List<Normal> modelNormals,
+            List<Vector3> modelNormals,
             List<Face> modelFaces)
         {
             _modelVertices = modelVertices;
@@ -72,6 +73,7 @@ namespace AKG.Realization.Elements
             _viewVertices = new(modelVertices);
             _perspectiveVertices = new(modelVertices);
             _viewportVertices = new(modelVertices);
+            _shadowVertices = new(modelVertices);
         }
 
         public void UpdateModelInfo(Vector3 eye, Vector3 target, Vector3 up)
@@ -84,8 +86,9 @@ namespace AKG.Realization.Elements
         public List<Vector4> GetModelVertices() => _modelVertices;
         public List<Vector4> GetWorldVertices() => _worldVertices;
         public List<Vector4> GetViewPortVertices() => _viewportVertices;
+        public List<Vector4> GetShadowVertices() => _shadowVertices;
         public List<Vector3> GetModelTextureCoordinates() => _modelTextureCoordinates;
-        public List<Normal> GetModelNormals() => _modelNormals;
+        public List<Vector3> GetModelNormals() => _modelNormals;
         public List<Face> GetModelFaces() => _modelFaces;
 
 
@@ -107,6 +110,12 @@ namespace AKG.Realization.Elements
             });
         }
         private List<Vector2> _modelTextureCoordinates2;
+        
+        public Vector4 GetLightSpacePosition(Vector4 worldPosition, Matrix4x4 lightViewProjectionMatrix)
+        {
+            return Vector4.Transform(worldPosition, lightViewProjectionMatrix);
+        }
+        
         public List<Vector2> GetTextureCoords()
         {
            
@@ -198,6 +207,61 @@ namespace AKG.Realization.Elements
             }
 
             return normals;
+        }
+        
+        public void CalculateVerticesForShadowMap(int width, int height, Matrix4x4 lightViewProjectionMatrix)
+        {
+            float aspect = width / (float)height;
+    
+            var res = Parallel.For(0, _modelVertices.Count, i =>
+            {
+                // Только мировые преобразования + преобразования источника света
+                var matrix = MatrixTransformations.GetWordMatrix(ShiftX, ShiftY, ShiftZ,
+                                 RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
+                             * lightViewProjectionMatrix
+                             * MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
+                
+                _shadowVertices[i] = MatrixTransformations.Transform(_modelVertices[i], matrix);
+            });
+        }
+        
+        public Matrix4x4 GetLightViewProjectionMatrix(int shadowMapWidth, int shadowMapHeight)
+        {
+            // Направление света уже есть в lightDir
+            // Вычисляем позицию источника света (немного выше сцены)
+            Vector3 lightPos = eye - lightDir * 10; // 10 - произвольное расстояние
+    
+            // Вычисляем bounding box модели для определения размера ортографической проекции
+            float minX = float.MaxValue, maxX = float.MinValue;
+            float minY = float.MaxValue, maxY = float.MinValue;
+            float minZ = float.MaxValue, maxZ = float.MinValue;
+
+            foreach (var vertex in _worldVertices)
+            {
+                minX = Math.Min(minX, vertex.X);
+                maxX = Math.Max(maxX, vertex.X);
+                minY = Math.Min(minY, vertex.Y);
+                maxY = Math.Max(maxY, vertex.Y);
+                minZ = Math.Min(minZ, vertex.Z);
+                maxZ = Math.Max(maxZ, vertex.Z);
+            }
+
+            float sceneSize = Math.Max(maxX - minX, Math.Max(maxY - minY, maxZ - minZ));
+    
+            // Матрица вида источника света
+            Matrix4x4 lightView = Matrix4x4.CreateLookAt(
+                lightPos,
+                lightPos + lightDir,
+                Vector3.UnitY);
+    
+            // Ортографическая проекция для направленного света
+            Matrix4x4 lightProjection = Matrix4x4.CreateOrthographic(
+                sceneSize * 2,
+                sceneSize * 2,
+                0.1f,
+                sceneSize * 4);
+    
+            return lightView * lightProjection;
         }
     }
 }

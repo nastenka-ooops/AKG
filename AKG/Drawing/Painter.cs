@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -14,6 +15,10 @@ namespace AKG.Drawing
     internal class Painter
     {
         private BuffBitmap _buffer;
+        private ShadowMap _shadowMap;
+
+        private readonly int _shadowMapSize = 1024; // Разрешение shadow map
+
         public int R { get; set; }
         public int G { get; set; }
         public int B { get; set; }
@@ -21,10 +26,12 @@ namespace AKG.Drawing
         public Painter(Bitmap bitmap)
         {
             _buffer = new BuffBitmap(bitmap);
+            _shadowMap = new ShadowMap(_shadowMapSize, _shadowMapSize); // Разрешение shadow map
         }
 
 
         #region Первая лаба
+
         private void DrawLine(int xStart, int yStart, int xEnd, int yEnd)
         {
             int dx = xEnd - xStart;
@@ -116,10 +123,12 @@ namespace AKG.Drawing
             //пишем из буфера
             _buffer.Flush();
         }
+
         #endregion
 
 
         #region Вторая лаба
+
         private void DrawTriangle(Vector4 v0, Vector4 v1, Vector4 v2, Color color)
         {
             // Сортировка вершин по Y (v0.Y <= v1.Y <= v2.Y)
@@ -230,20 +239,39 @@ namespace AKG.Drawing
             //пишем из буфера
             _buffer.Flush();
         }
+
         #endregion
 
 
         #region Третья лаба
+
         private void DrawTriangleWithPhongInterpolation(
-    Vector4 v0, Vector4 v1, Vector4 v2,
-    Vector3 n0, Vector3 n1, Vector3 n2,
-    Vector3 worldPos0, Vector3 worldPos1, Vector3 worldPos2,
-    Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess, Vector3 lightDir, Vector3 viewDir, Vector3 lightColor)
+            Vector4 v0, Vector4 v1, Vector4 v2,
+            Vector3 n0, Vector3 n1, Vector3 n2,
+            Vector3 worldPos0, Vector3 worldPos1, Vector3 worldPos2,
+            Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess, Vector3 lightDir, Vector3 viewDir, Vector3 lightColor)
         {
             // Сортировка вершин по Y (v0.Y <= v1.Y <= v2.Y)
-            if (v0.Y > v2.Y) { (v0, v2) = (v2, v0); (n0, n2) = (n2, n0); (worldPos0, worldPos2) = (worldPos2, worldPos0); }
-            if (v0.Y > v1.Y) { (v0, v1) = (v1, v0); (n0, n1) = (n1, n0); (worldPos0, worldPos1) = (worldPos1, worldPos0); }
-            if (v1.Y > v2.Y) { (v1, v2) = (v2, v1); (n1, n2) = (n2, n1); (worldPos1, worldPos2) = (worldPos2, worldPos1); }
+            if (v0.Y > v2.Y)
+            {
+                (v0, v2) = (v2, v0);
+                (n0, n2) = (n2, n0);
+                (worldPos0, worldPos2) = (worldPos2, worldPos0);
+            }
+
+            if (v0.Y > v1.Y)
+            {
+                (v0, v1) = (v1, v0);
+                (n0, n1) = (n1, n0);
+                (worldPos0, worldPos1) = (worldPos1, worldPos0);
+            }
+
+            if (v1.Y > v2.Y)
+            {
+                (v1, v2) = (v2, v1);
+                (n1, n2) = (n2, n1);
+                (worldPos1, worldPos2) = (worldPos2, worldPos1);
+            }
 
             // Вычисление градиентов для координат X, Z и нормалей
             var kv1 = (v2 - v0) / (v2.Y - v0.Y);
@@ -370,6 +398,7 @@ namespace AKG.Drawing
 
             _buffer.Flush();
         }
+
         private void DrawTriangleWithInterpolation(Vector4 v0, Vector4 v1, Vector4 v2, Color c0, Color c1, Color c2)
         {
             // Сортировка вершин по Y (v0.Y <= v1.Y <= v2.Y)
@@ -480,7 +509,7 @@ namespace AKG.Drawing
             Vector3 ambient = Ka * lightColor * 1f;
             // Рассеянное освещение
             float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
-            Vector3 diffuse = Kd * diff * lightColor;   
+            Vector3 diffuse = Kd * diff * lightColor;
             // Зеркальное освещение
             Vector3 reflectDir = Vector3.Reflect(-lightDir, normal);
             float spec = (float)Math.Pow(Math.Max(Vector3.Dot(viewDir, reflectDir), 0), shininess);
@@ -495,17 +524,14 @@ namespace AKG.Drawing
                 (int)(finalColor.Y * this.G),
                 (int)(finalColor.Z * this.R));
         }
+
         #endregion
-
-
 
 
         #region 4 laba tmp
 
-
-
         private Color CalculatePhongColor2(Vector4 position4, Vector3 normal, Vector3 lightDir, Vector3 viewDir,
-         Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess, Vector3 lightColor)
+            Vector3 Ka, Vector3 Kd, Vector3 Ks, float shininess, Vector3 lightColor)
         {
             var position = new Vector3(position4.X, position4.Y, position4.Z);
             normal = Vector3.Normalize(normal);
@@ -513,7 +539,7 @@ namespace AKG.Drawing
             viewDir = Vector3.Normalize(viewDir - position);
 
             // Фоновое освещение
-            Vector3 ambient = Ka * lightColor ;
+            Vector3 ambient = Ka * lightColor;
             // Рассеянное освещение
             float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
             Vector3 diffuse = Kd * diff * lightColor;
@@ -531,6 +557,7 @@ namespace AKG.Drawing
                 (int)(finalColor.Y * lightColor.Y * 255),
                 (int)(finalColor.X * lightColor.X * 255));
         }
+
         public void PaintModelLaba4(Model model)
         {
             model.CalculateVertices(_buffer.width, _buffer.height);
@@ -573,13 +600,27 @@ namespace AKG.Drawing
         }
 
         private void DrawTexturedTriangle(Vector4 v0, Vector4 v1, Vector4 v2,
-    Vector3 uv0, Vector3 uv1, Vector3 uv2,
-    Model model)
+            Vector3 uv0, Vector3 uv1, Vector3 uv2,
+            Model model)
         {
             // Сортировка вершин по Y
-            if (v0.Y > v2.Y) { (v0, v2) = (v2, v0); (uv0, uv2) = (uv2, uv0); }
-            if (v0.Y > v1.Y) { (v0, v1) = (v1, v0); (uv0, uv1) = (uv1, uv0); }
-            if (v1.Y > v2.Y) { (v1, v2) = (v2, v1); (uv1, uv2) = (uv2, uv1); }
+            if (v0.Y > v2.Y)
+            {
+                (v0, v2) = (v2, v0);
+                (uv0, uv2) = (uv2, uv0);
+            }
+
+            if (v0.Y > v1.Y)
+            {
+                (v0, v1) = (v1, v0);
+                (uv0, uv1) = (uv1, uv0);
+            }
+
+            if (v1.Y > v2.Y)
+            {
+                (v1, v2) = (v2, v1);
+                (uv1, uv2) = (uv2, uv1);
+            }
 
             // Вычисляем градиенты для координат X, Z и 1/W (для перспективно-корректной интерполяции)
             float deltaY = v2.Y - v0.Y;
@@ -645,7 +686,7 @@ namespace AKG.Drawing
                     var t = (x - av.X) * k;
                     var invW = aInvW * (1 - t) + bInvW * t;
                     var z = 1 / invW; // Корректное значение глубины
-                  
+
                     // Перспективно-корректные UV
                     var uvPersp = auvPersp * (1 - t) + buvPersp * t;
                     var uv = uvPersp * z;
@@ -662,7 +703,7 @@ namespace AKG.Drawing
                     var Ka = new Vector3(texColor.R / 255f, texColor.G / 255f, texColor.B / 255f);
                     var color = CalculatePhongColor2(
                         new Vector4(x, y, z, 1), // Используем корректное значение z
-                        normal, 
+                        normal,
                         model.lightDir,
                         model.target,
                         Ka,
@@ -670,9 +711,9 @@ namespace AKG.Drawing
                         new Vector3(specular),
                         model.Shininess,
                         model.lightColor);
-                   
+
                     // Запись в буфер (используем z для проверки глубины)
-                    if (_buffer.PutZValue(x, y, 1/z))
+                    if (_buffer.PutZValue(x, y, 1 / z))
                         _buffer[x, y] = color;
                 }
             }
@@ -683,6 +724,7 @@ namespace AKG.Drawing
             var color = GetTextureColor(specularMap, u, v);
             return (color.R + color.G + color.B) / (3 * 255f);
         }
+
         private Color GetTextureColor(Bitmap texture, float u, float v)
         {
             // Обеспечиваем повторение текстуры (tiling)
@@ -716,8 +758,285 @@ namespace AKG.Drawing
                 color.G / 255f,
                 color.B / 255f);
         }
+
         // Остальные методы без изменений
+
         #endregion
 
+        #region 5 лаба
+
+        public void PaintModelLaba5(Model model)
+        {
+            // 1. Рендеринг shadow map (первый проход)
+            RenderShadowMapPass(model);
+
+            // 2. Основной рендеринг (второй проход)
+            RenderMainPass(model);
+
+            _buffer.Flush();
+        }
+
+        private void RenderShadowMapPass(Model model)
+        {
+            Matrix4x4 lightViewProjection = model.GetLightViewProjectionMatrix(_shadowMapSize, _shadowMapSize);
+
+            // Рассчитываем вершины с точки зрения источника света
+            model.CalculateVerticesForShadowMap(_shadowMapSize, _shadowMapSize, lightViewProjection);
+
+            // Очищаем shadow map
+            _shadowMap.ClearDepthBuffer();
+        }
+
+        private void RenderMainPass(Model model)
+        {
+            // Рассчитываем вершины для основного рендеринга
+            model.CalculateVertices(_buffer.width, _buffer.height);
+
+            // Рендерим все треугольники с учетом теней
+            foreach (var face in model.GetModelFaces())
+            {
+                var v0 = model.GetViewPortVertices()[face.Indices[0].VertexIndex - 1];
+                var v1 = model.GetViewPortVertices()[face.Indices[1].VertexIndex - 1];
+                var v2 = model.GetViewPortVertices()[face.Indices[2].VertexIndex - 1];
+
+                // Мировые координаты вершин
+                var wv0 = model.GetWorldVertices()[face.Indices[0].VertexIndex - 1];
+                var wv1 = model.GetWorldVertices()[face.Indices[1].VertexIndex - 1];
+                var wv2 = model.GetWorldVertices()[face.Indices[2].VertexIndex - 1];
+
+                // Текстурные координаты
+                var uv0 = model.GetModelTextureCoordinates()[face.Indices[0].TextureIndex - 1];
+                var uv1 = model.GetModelTextureCoordinates()[face.Indices[1].TextureIndex - 1];
+                var uv2 = model.GetModelTextureCoordinates()[face.Indices[2].TextureIndex - 1];
+
+                // Рисуем треугольник с учетом теней
+                DrawTexturedTriangleWithShadows(
+                    new Vector4(v0.X, v0.Y, wv0.Z, v0.W),
+                    new Vector4(v1.X, v1.Y, wv1.Z, v1.W),
+                    new Vector4(v2.X, v2.Y, wv2.Z, v2.W),
+                    new Vector3(wv0.X, wv0.Y, wv0.Z),
+                    new Vector3(wv1.X, wv1.Y, wv1.Z),
+                    new Vector3(wv2.X, wv2.Y, wv2.Z),
+                    uv0, uv1, uv2,
+                    model);
+            }
+        }
+
+        private void DrawTexturedTriangleWithShadows(
+            Vector4 v0, Vector4 v1, Vector4 v2,
+            Vector3 wv0, Vector3 wv1, Vector3 wv2,
+            Vector3 uv0, Vector3 uv1, Vector3 uv2,
+            Model model)
+        {
+            // Сортировка вершин по Y
+            if (v0.Y > v2.Y)
+            {
+                (v0, v2) = (v2, v0);
+                (uv0, uv2) = (uv2, uv0);
+            }
+
+            if (v0.Y > v1.Y)
+            {
+                (v0, v1) = (v1, v0);
+                (uv0, uv1) = (uv1, uv0);
+            }
+
+            if (v1.Y > v2.Y)
+            {
+                (v1, v2) = (v2, v1);
+                (uv1, uv2) = (uv2, uv1);
+            }
+
+            // Вычисляем градиенты для координат X, Z и 1/W (для перспективно-корректной интерполяции)
+            float deltaY = v2.Y - v0.Y;
+            var kv1 = deltaY != 0 ? (v2 - v0) / deltaY : Vector4.Zero;
+            var kuv1 = deltaY != 0 ? (uv2 / v2.W - uv0 / v0.W) / deltaY : Vector3.Zero;
+            var kInvW1 = deltaY != 0 ? (1 / v2.W - 1 / v0.W) / deltaY : 0f;
+
+            deltaY = v1.Y - v0.Y;
+            var kv2 = deltaY != 0 ? (v1 - v0) / deltaY : Vector4.Zero;
+            var kuv2 = deltaY != 0 ? (uv1 / v1.W - uv0 / v0.W) / deltaY : Vector3.Zero;
+            var kInvW2 = deltaY != 0 ? (1 / v1.W - 1 / v0.W) / deltaY : 0f;
+
+            deltaY = v2.Y - v1.Y;
+            var kv3 = deltaY != 0 ? (v2 - v1) / deltaY : Vector4.Zero;
+            var kuv3 = deltaY != 0 ? (uv2 / v2.W - uv1 / v1.W) / deltaY : Vector3.Zero;
+            var kInvW3 = deltaY != 0 ? (1 / v2.W - 1 / v1.W) / deltaY : 0f;
+
+            // Границы растеризации
+            var top = Math.Max(0, (int)Math.Ceiling(v0.Y));
+            var bottom = Math.Min(_buffer.height, (int)Math.Ceiling(v2.Y));
+
+            for (int y = top; y < bottom; y++)
+            {
+                Vector4 av, bv;
+                Vector3 auvPersp, buvPersp;
+                float aInvW, bInvW;
+
+                if (y < v1.Y)
+                {
+                    var t = y - v0.Y;
+                    av = v0 + t * kv1;
+                    bv = v0 + t * kv2;
+                    auvPersp = uv0 / v0.W + t * kuv1;
+                    buvPersp = uv0 / v0.W + t * kuv2;
+                    aInvW = 1 / v0.W + t * kInvW1;
+                    bInvW = 1 / v0.W + t * kInvW2;
+                }
+                else
+                {
+                    var t = y - v1.Y;
+                    av = v1 + t * kv3;
+                    bv = v0 + (y - v0.Y) * kv1;
+                    auvPersp = uv1 / v1.W + t * kuv3;
+                    buvPersp = uv0 / v0.W + (y - v0.Y) * kuv1;
+                    aInvW = 1 / v1.W + t * kInvW3;
+                    bInvW = 1 / v0.W + (y - v0.Y) * kInvW1;
+                }
+
+                if (av.X > bv.X)
+                {
+                    (av, bv) = (bv, av);
+                    (auvPersp, buvPersp) = (buvPersp, auvPersp);
+                    (aInvW, bInvW) = (bInvW, aInvW);
+                }
+
+                var left = Math.Max(0, (int)Math.Ceiling(av.X));
+                var right = Math.Min(_buffer.width, (int)Math.Ceiling(bv.X));
+                var step = bv.X - av.X;
+                var k = step != 0 ? 1.0f / step : 0;
+
+                for (int x = left; x < right; x++)
+                {
+                    var t = (x - av.X) * k;
+                    var invW = aInvW * (1 - t) + bInvW * t;
+                    var z = 1 / invW; // Корректное значение глубины
+
+                    // Перспективно-корректные UV
+                    var uvPersp = auvPersp * (1 - t) + buvPersp * t;
+                    var uv = uvPersp * z;
+
+                    // Получаем данные из текстур
+                    var texColor = GetTextureColor(model.DiffuseMap, uv.X, uv.Y);
+                    var normal = GetNormalFromMap(model.NormalMap, uv.X, uv.Y);
+                    var specular = GetSpecularIntensity(model.SpecularMap, uv.X, uv.Y);
+
+                    // Преобразование нормали
+                    normal = Vector3.Normalize(normal * 2 - Vector3.One);
+
+                    // Расчет освещения
+                    var Ka = new Vector3(texColor.R / 255f, texColor.G / 255f, texColor.B / 255f);
+                    var color = CalculatePhongColor2(
+                        new Vector4(x, y, z, 1), // Используем корректное значение z
+                        normal,
+                        model.lightDir,
+                        model.target,
+                        Ka,
+                        Ka,
+                        new Vector3(specular),
+                        model.Shininess,
+                        model.lightColor);
+
+                    // Запись в буфер (используем z для проверки глубины)
+                    if (_buffer.PutZValue(x, y, 1 / z))
+                        _buffer[x, y] = color;
+                }
+            }
+        }
+
+        private Color CalculatePixelColorWithShadows(
+            Vector3 worldPos, Vector3 normal, Vector2 uv, Model model)
+        {
+            // Получаем shadow factor
+            float shadowFactor = _shadowMap.GetShadowFactor(new Vector4(worldPos, 1.0f));
+
+            // Получаем цвет из диффузной текстуры
+            Color texColor = GetTextureColor(model.DiffuseMap, uv.X, uv.Y);
+
+            // Получаем нормаль из normal map (если есть)
+            if (model.NormalMap != null)
+            {
+                Vector3 texNormal = GetNormalFromMap(model.NormalMap, uv.X, uv.Y);
+                // Преобразуем нормаль из [0,1] в [-1,1]
+                texNormal = Vector3.Normalize(texNormal * 2 - Vector3.One);
+                normal = Vector3.Normalize(normal + texNormal);
+            }
+
+            // Получаем зеркальность из specular map (если есть)
+            float specularIntensity = 1.0f;
+            if (model.SpecularMap != null)
+            {
+                specularIntensity = GetSpecularIntensity(model.SpecularMap, uv.X, uv.Y);
+            }
+
+            // Векторы для освещения
+            Vector3 lightDir = Vector3.Normalize(-model.lightDir);
+            Vector3 viewDir = Vector3.Normalize(model.eye - worldPos);
+
+            // Ambient
+            Vector3 ambient = model.Ka * new Vector3(texColor.R, texColor.G, texColor.B) / 255.0f;
+
+            // Diffuse
+            float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
+            Vector3 diffuse = model.Kd * diff * model.lightColor * shadowFactor;
+
+            // Specular
+            Vector3 reflectDir = Vector3.Reflect(-lightDir, normal);
+            float spec = (float)Math.Pow(Math.Max(Vector3.Dot(viewDir, reflectDir), model.Shininess), 2);
+            Vector3 specular = model.Ks * spec * model.lightColor * shadowFactor * specularIntensity;
+
+            // Итоговый цвет
+            Vector3 result = ambient + diffuse + specular;
+            result = Vector3.Clamp(result, Vector3.Zero, Vector3.One);
+
+            return Color.FromArgb(
+                (int)(result.X * R),
+                (int)(result.Y * G),
+                (int)(result.Z * B));
+        }
+
+        private void SaveToFile()
+        {
+            int width = _shadowMap._width;
+            int height = _shadowMap._height;
+            Bitmap bitmap = new Bitmap(width, height);
+
+            // Найдём min и max глубины, чтобы нормализовать
+            float min = float.MaxValue;
+            float max = float.MinValue;
+
+            foreach (float d in _shadowMap._depthBuffer)
+            {
+                if (float.IsInfinity(d) || float.IsNaN(d)) continue;
+                if (d < min) min = d;
+                if (d > max) max = d;
+            }
+
+            float range = Math.Max(0.0001f, max - min); // избегаем деления на 0
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int index = y * width + x;
+                    float depth = _shadowMap._depthBuffer[index];
+
+                    // Нормализуем значение в диапазон [0, 255]
+                    byte intensity = 0;
+                    if (!float.IsInfinity(depth) && !float.IsNaN(depth))
+                    {
+                        float norm = (depth - min) / range;
+                        intensity = (byte)(255 - (norm * 255)); // инвертированная яркость: ближе → светлее
+                    }
+
+                    Color color = Color.FromArgb(intensity, intensity, intensity);
+                    bitmap.SetPixel(x, y, color);
+                }
+            }
+
+            bitmap.Save("C:\\BSUIR\\AKGv2\\AKG\\Models\\shadow-maps\\shadow.png", ImageFormat.Png);
+        }
+
+        #endregion
     }
 }
