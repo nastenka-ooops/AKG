@@ -31,13 +31,14 @@ public class ShadowMap
         
         // 2. Рассчитываем вершины с точки зрения источника света
         model.CalculateVerticesForShadowMap(_width, _height, LightViewProjectionMatrix);
-        
+
+        var shadowVertices = model.GetShadowVertices();
         // 3. Рендерим глубину в буфер
         foreach (var face in model.GetModelFaces())
         {
-            var v0 = model.GetViewPortVertices()[face.Indices[0].VertexIndex - 1];
-            var v1 = model.GetViewPortVertices()[face.Indices[1].VertexIndex - 1];
-            var v2 = model.GetViewPortVertices()[face.Indices[2].VertexIndex - 1];
+            var v0 = shadowVertices[face.Indices[0].VertexIndex - 1];
+            var v1 = shadowVertices[face.Indices[1].VertexIndex - 1];
+            var v2 = shadowVertices[face.Indices[2].VertexIndex - 1];
             
             RenderTriangle(v0, v1, v2);
         }

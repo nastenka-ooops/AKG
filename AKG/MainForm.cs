@@ -64,6 +64,9 @@ namespace AKG
                 case 3:
                     _painter.PaintModelLaba4(_model);
                     break;
+                case 4:
+                    _painter.PaintModelLaba5(_model);
+                    break;
                 default:
                     _painter.PaintModelLaba5(_model);
                     break;

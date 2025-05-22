@@ -773,6 +773,8 @@ namespace AKG.Drawing
             // 2. Основной рендеринг (второй проход)
             RenderMainPass(model);
 
+            _shadowMap.ClearDepthBuffer();
+
             _buffer.Flush();
         }
 
@@ -788,23 +790,28 @@ namespace AKG.Drawing
         {
             // Рассчитываем вершины для основного рендеринга
             model.CalculateVertices(_buffer.width, _buffer.height);
+            var viewPortVertices = model.GetViewPortVertices();
+            var worldVertices = model.GetWorldVertices();
+            var textureCoordinates = model.GetModelTextureCoordinates();
 
             // Рендерим все треугольники с учетом теней
             foreach (var face in model.GetModelFaces())
             {
-                var v0 = model.GetViewPortVertices()[face.Indices[0].VertexIndex - 1];
-                var v1 = model.GetViewPortVertices()[face.Indices[1].VertexIndex - 1];
-                var v2 = model.GetViewPortVertices()[face.Indices[2].VertexIndex - 1];
+                var v0 = viewPortVertices[face.Indices[0].VertexIndex - 1];
+                var v1 = viewPortVertices[face.Indices[1].VertexIndex - 1];
+                var v2 = viewPortVertices[face.Indices[2].VertexIndex - 1];
+
 
                 // Мировые координаты вершин
-                var wv0 = model.GetWorldVertices()[face.Indices[0].VertexIndex - 1];
-                var wv1 = model.GetWorldVertices()[face.Indices[1].VertexIndex - 1];
-                var wv2 = model.GetWorldVertices()[face.Indices[2].VertexIndex - 1];
+                var wv0 = worldVertices[face.Indices[0].VertexIndex - 1];
+                var wv1 = worldVertices[face.Indices[1].VertexIndex - 1];
+                var wv2 = worldVertices[face.Indices[2].VertexIndex - 1];
+
 
                 // Текстурные координаты
-                var uv0 = model.GetModelTextureCoordinates()[face.Indices[0].TextureIndex - 1];
-                var uv1 = model.GetModelTextureCoordinates()[face.Indices[1].TextureIndex - 1];
-                var uv2 = model.GetModelTextureCoordinates()[face.Indices[2].TextureIndex - 1];
+                var uv0 = textureCoordinates[face.Indices[0].TextureIndex - 1];
+                var uv1 = textureCoordinates[face.Indices[1].TextureIndex - 1];
+                var uv2 = textureCoordinates[face.Indices[2].TextureIndex - 1];
 
                 // Рисуем треугольник с учетом теней
                 DrawTexturedTriangleWithShadows(
@@ -922,7 +929,7 @@ namespace AKG.Drawing
                     normal = Vector3.Normalize(normal * 2 - Vector3.One);
 
                     // Расчет освещения
-                    var Ka = new Vector3(texColor.R / 255f, texColor.G / 255f, texColor.B / 255f);
+                    var Ka = new Vector3(texColor.B / 255f, texColor.G / 255f, texColor.R / 255f);
                     var color = CalculatePhongColorWithShadow2(
                         new Vector4(x, y, z, 1), // Используем корректное значение z
                         normal, model.lightDir, model.target,
@@ -972,7 +979,7 @@ namespace AKG.Drawing
             if (diffuseMap != null)
             {
                 Color texColor = GetTextureColor(diffuseMap, uv.X, uv.Y);
-                baseColor = new Vector3(texColor.R, texColor.G, texColor.B) / 255.0f;
+                baseColor = new Vector3(texColor.B, texColor.G, texColor.R) / 255.0f;
             }
 
             // Коррекция нормали с помощью normal map (если есть)
@@ -1008,9 +1015,9 @@ namespace AKG.Drawing
 
             // Преобразуем в Color с учетом настроек R,G,B
             return Color.FromArgb(
-                (int)(finalColor.X * R),
+                (int)(finalColor.X * B),
                 (int)(finalColor.Y * G),
-                (int)(finalColor.Z * B));
+                (int)(finalColor.Z * R));
         }
 
         private Color CalculatePixelColorWithShadows(
@@ -1043,7 +1050,7 @@ namespace AKG.Drawing
             Vector3 viewDir = Vector3.Normalize(model.eye - worldPos);
 
             // Ambient
-            Vector3 ambient = model.Ka * new Vector3(texColor.R, texColor.G, texColor.B) / 255.0f;
+            Vector3 ambient = model.Ka * new Vector3(texColor.B, texColor.G, texColor.R) / 255.0f;
 
             // Diffuse
             float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
@@ -1059,9 +1066,9 @@ namespace AKG.Drawing
             result = Vector3.Clamp(result, Vector3.Zero, Vector3.One);
 
             return Color.FromArgb(
-                (int)(result.X * R),
+                (int)(result.X * B),
                 (int)(result.Y * G),
-                (int)(result.Z * B));
+                (int)(result.Z * R));
         }
 
         private void SaveToFile()
@@ -1102,8 +1109,11 @@ namespace AKG.Drawing
                     bitmap.SetPixel(x, y, color);
                 }
             }
-
-            bitmap.Save("C:\\BSUIR\\AKGv2\\AKG\\Models\\shadow-maps\\shadow.png", ImageFormat.Png);
+            if (File.Exists("shadow.png"))
+            {
+                File.Delete("shadow.png");
+            }
+            bitmap.Save("shadow.png", ImageFormat.Png);
         }
 
         #endregion

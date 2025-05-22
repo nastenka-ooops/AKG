@@ -95,7 +95,7 @@ namespace AKG.Drawing
                 _bitmap.PixelFormat);
             Marshal.Copy(_buffer, 0, data.Scan0, _buffer.Length);
             _bitmap.UnlockBits(data);
-            _bitmap.Save("tmp.png", ImageFormat.Png);
+            _bitmap.Save("tmp.png", ImageFormat.Png);   
             Reset();
         }
     }

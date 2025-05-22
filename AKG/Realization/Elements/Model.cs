@@ -39,11 +39,14 @@ namespace AKG.Realization.Elements
 
         public Vector3 lightColor { get; set; } = new Vector3(0.9f, 0.9f, 0.9f);
 
-        public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
+        public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/nothing.jpg");
+        //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
         //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
-        public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
+        public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/nothing.jpg");
+        //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
         //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/craneo.jpg");
-        public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
+        public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/nothing.jpg");
+        //public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
        // public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/craneo.jpg");
         public void setDefaultMaterial()
         {
@@ -224,44 +227,107 @@ namespace AKG.Realization.Elements
                 _shadowVertices[i] = MatrixTransformations.Transform(_modelVertices[i], matrix);
             });
         }
-        
+
+        //public Matrix4x4 GetLightViewProjectionMatrix(int shadowMapWidth, int shadowMapHeight)
+        //{
+        //    // Направление света уже есть в lightDir
+        //    // Вычисляем позицию источника света (немного выше сцены)
+        //    Vector3 lightPos = eye - lightDir * 10; // 10 - произвольное расстояние
+
+        //    // Вычисляем bounding box модели для определения размера ортографической проекции
+        //    float minX = float.MaxValue, maxX = float.MinValue;
+        //    float minY = float.MaxValue, maxY = float.MinValue;
+        //    float minZ = float.MaxValue, maxZ = float.MinValue;
+
+        //    foreach (var vertex in _worldVertices)
+        //    {
+        //        minX = Math.Min(minX, vertex.X);
+        //        maxX = Math.Max(maxX, vertex.X);
+        //        minY = Math.Min(minY, vertex.Y);
+        //        maxY = Math.Max(maxY, vertex.Y);
+        //        minZ = Math.Min(minZ, vertex.Z);
+        //        maxZ = Math.Max(maxZ, vertex.Z);
+        //    }
+
+
+        //    float sceneSize = Math.Max(maxX - minX, Math.Max(maxY - minY, maxZ - minZ));
+
+        //    Vector3 sceneCenter = new Vector3(
+        //        (minX + maxX) * 0.5f,
+        //        (minY + maxY) * 0.5f,
+        //        (minZ + maxZ) * 0.5f);
+
+        //    //Vector3 lightPos = sceneCenter - Vector3.Normalize(lightDir) * sceneSize * 2;
+
+        //    Matrix4x4 lightView = Matrix4x4.CreateLookAt(
+        //        lightPos,
+        //        lightPos + lightDir,
+        //        Vector3.UnitY);
+        //    //Matrix4x4 lightView = Matrix4x4.CreateLookAt(
+        //    //    lightPos,
+        //    //    sceneCenter,  // Смотрим на центр сцены
+        //    //    Vector3.UnitY);
+        //    // Ортографическая проекция для направленного света
+        //    Matrix4x4 lightProjection = Matrix4x4.CreateOrthographic(
+        //        sceneSize * 2,
+        //        sceneSize * 2,
+        //        0.1f,
+        //        sceneSize * 4);
+
+        //    return lightView * lightProjection;
+        //}
         public Matrix4x4 GetLightViewProjectionMatrix(int shadowMapWidth, int shadowMapHeight)
         {
-            // Направление света уже есть в lightDir
-            // Вычисляем позицию источника света (немного выше сцены)
-            Vector3 lightPos = eye - lightDir * 10; // 10 - произвольное расстояние
-    
-            // Вычисляем bounding box модели для определения размера ортографической проекции
-            float minX = float.MaxValue, maxX = float.MinValue;
-            float minY = float.MaxValue, maxY = float.MinValue;
-            float minZ = float.MaxValue, maxZ = float.MinValue;
+            // A. Вычисляем AABB сцены
+            var (min, max) = CalculateSceneBounds();
 
-            foreach (var vertex in _worldVertices)
+            // B. Центр сцены
+            Vector3 sceneCenter = (min + max) * 0.5f;
+
+            // C. Направление света (обязательно нормализовать!)
+            Vector3 lightDirection = Vector3.Normalize(lightDir);
+
+            // D. Позиция источника света
+            float sceneRadius = (max - min).Length() * 0.5f;
+            Vector3 lightPos = sceneCenter - lightDirection * (sceneRadius * 2);
+
+            // E. Вычисляем Up-вектор
+            Vector3 lightUp = Math.Abs(Vector3.Dot(lightDirection, Vector3.UnitY)) > 0.95f
+                ? Vector3.UnitZ
+                : Vector3.UnitY;
+
+            // F. Матрица вида
+            var lightView = Matrix4x4.CreateLookAt(
+                lightPos,
+                sceneCenter,
+                lightUp);
+
+            // G. Ортографическая проекция
+            var size = sceneRadius * 2.5f;
+            var lightProjection = Matrix4x4.CreateOrthographic(
+                size,
+                size,
+                0.1f,
+                size * 4);
+
+            return lightView * lightProjection;
+        }
+
+        private (Vector3 min, Vector3 max) CalculateSceneBounds()
+        {
+            Vector3 min = new Vector3(float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue);
+
+            foreach (var v in _worldVertices)
             {
-                minX = Math.Min(minX, vertex.X);
-                maxX = Math.Max(maxX, vertex.X);
-                minY = Math.Min(minY, vertex.Y);
-                maxY = Math.Max(maxY, vertex.Y);
-                minZ = Math.Min(minZ, vertex.Z);
-                maxZ = Math.Max(maxZ, vertex.Z);
+                //Vector3 scaledPos = new Vector3(v.X, v.Y, v.Z) * Scale;
+                //min = Vector3.Min(min, scaledPos);
+                //max = Vector3.Max(max, scaledPos);
+                min = Vector3.Min(min, new Vector3(v.X, v.Y, v.Z));
+                max = Vector3.Max(max, new Vector3(v.X, v.Y, v.Z));
             }
 
-            float sceneSize = Math.Max(maxX - minX, Math.Max(maxY - minY, maxZ - minZ));
-    
-            // Матрица вида источника света
-            Matrix4x4 lightView = Matrix4x4.CreateLookAt(
-                lightPos,
-                lightPos + lightDir,
-                Vector3.UnitY);
-    
-            // Ортографическая проекция для направленного света
-            Matrix4x4 lightProjection = Matrix4x4.CreateOrthographic(
-                sceneSize * 2,
-                sceneSize * 2,
-                0.1f,
-                sceneSize * 4);
-    
-            return lightView * lightProjection;
+            return (min, max);
         }
     }
 }

@@ -30,6 +30,9 @@
         {
             pictureBox = new PictureBox();
             panel1 = new Panel();
+            comboBoxLabChoice = new ComboBox();
+            label10 = new Label();
+            label9 = new Label();
             buttonLightColor = new Button();
             txtBoxColorB = new TextBox();
             txtBoxColorG = new TextBox();
@@ -52,9 +55,6 @@
             label1 = new Label();
             textBoxScale = new TextBox();
             buttonOpen = new Button();
-            label9 = new Label();
-            label10 = new Label();
-            comboBoxLabChoice = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -109,6 +109,35 @@
             panel1.Size = new Size(660, 124);
             panel1.TabIndex = 1;
             panel1.Paint += panel1_Paint;
+            // 
+            // comboBoxLabChoice
+            // 
+            comboBoxLabChoice.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxLabChoice.FormattingEnabled = true;
+            comboBoxLabChoice.Items.AddRange(new object[] { "lab1", "lab2", "lab3", "lab4", "lab5" });
+            comboBoxLabChoice.Location = new Point(113, 25);
+            comboBoxLabChoice.Name = "comboBoxLabChoice";
+            comboBoxLabChoice.Size = new Size(98, 23);
+            comboBoxLabChoice.TabIndex = 24;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(568, 8);
+            label10.Name = "label10";
+            label10.Size = new Size(66, 15);
+            label10.TabIndex = 23;
+            label10.Text = "Light Color";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(439, 9);
+            label9.Name = "label9";
+            label9.Size = new Size(74, 15);
+            label9.TabIndex = 22;
+            label9.Text = "Object Color";
+            label9.Click += label9_Click;
             // 
             // buttonLightColor
             // 
@@ -308,34 +337,6 @@
             buttonOpen.Text = "Открыть обьект";
             buttonOpen.UseVisualStyleBackColor = true;
             buttonOpen.Click += buttonOpen_Click;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(439, 9);
-            label9.Name = "label9";
-            label9.Size = new Size(74, 15);
-            label9.TabIndex = 22;
-            label9.Text = "Object Color";
-            label9.Click += label9_Click;
-            // 
-            // label10
-            // 
-            label10.AutoSize = true;
-            label10.Location = new Point(568, 8);
-            label10.Name = "label10";
-            label10.Size = new Size(66, 15);
-            label10.TabIndex = 23;
-            label10.Text = "Light Color";
-            // 
-            // comboBoxLabChoice
-            // 
-            comboBoxLabChoice.FormattingEnabled = true;
-            comboBoxLabChoice.Items.AddRange(new object[] { "lab1", "lab2", "lab3", "lab4" });
-            comboBoxLabChoice.Location = new Point(113, 25);
-            comboBoxLabChoice.Name = "comboBoxLabChoice";
-            comboBoxLabChoice.Size = new Size(98, 23);
-            comboBoxLabChoice.TabIndex = 24;
             // 
             // MainForm
             // 
