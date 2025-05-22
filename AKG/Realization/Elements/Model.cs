@@ -32,22 +32,25 @@ namespace AKG.Realization.Elements
 
         public float Scale { get; set; } = 0.005f;
 
-        public Vector3 Ka { get; set; }//фоновое
-        public Vector3 Kd { get; set; }//рассеяное
-        public Vector3 Ks { get; set; }//зеркальное
+        public Vector3 Ka { get; set; } //фоновое
+        public Vector3 Kd { get; set; } //рассеяное
+        public Vector3 Ks { get; set; } //зеркальное
         public float Shininess { get; set; } // коэф блеска
 
         public Vector3 lightColor { get; set; } = new Vector3(0.9f, 0.9f, 0.9f);
 
         public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/nothing.jpg");
+
         //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
         //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
         public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/nothing.jpg");
+
         //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
         //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/craneo.jpg");
         public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/nothing.jpg");
+
         //public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
-       // public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/craneo.jpg");
+        // public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/craneo.jpg");
         public void setDefaultMaterial()
         {
             this.Ka = new Vector3(0.1f, 0.1f, 0.1f);
@@ -62,7 +65,7 @@ namespace AKG.Realization.Elements
         public Vector3 lightDir = new Vector3(0, -1, 1);
         public float zFar = 100;
         public float zNear;
-        public float Fov = (float)( PI / 3);
+        public float Fov = (float)(PI / 3);
 
         public Model(List<Vector4> modelVertices, List<Vector3> modelTextureCoordinates,
             List<Vector3> modelNormals,
@@ -103,30 +106,29 @@ namespace AKG.Realization.Elements
             var res = Parallel.For(0, _modelVertices.Count, i =>
             {
                 var matrix = MatrixTransformations.GetWordMatrix(ShiftX, ShiftY,
-                    ShiftZ,
-                    RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
-                * MatrixTransformations.GetViewMatrix(eye, target, up)
-                * MatrixTransformations.GetPerspectiveProjectionMatrix(Fov, aspect, zNear, zFar)
-                * MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
+                                 ShiftZ,
+                                 RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
+                             * MatrixTransformations.GetViewMatrix(eye, target, up)
+                             * MatrixTransformations.GetPerspectiveProjectionMatrix(Fov, aspect, zNear, zFar)
+                             * MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
                 _viewportVertices[i] = MatrixTransformations.Transform(_modelVertices[i], matrix);
-        
             });
         }
+
         private List<Vector2> _modelTextureCoordinates2;
-        
+
         public Vector4 GetLightSpacePosition(Vector4 worldPosition, Matrix4x4 lightViewProjectionMatrix)
         {
             return Vector4.Transform(worldPosition, lightViewProjectionMatrix);
         }
-        
+
         public List<Vector2> GetTextureCoords()
         {
-           
             // Если есть явные текстурные координаты, возвращаем их
             if (_modelTextureCoordinates != null && _modelTextureCoordinates.Count > 0)
             {
                 List<Vector2> _modelTextureCoordinates2 = new List<Vector2>();
-                foreach (Vector3 v in  _modelTextureCoordinates)
+                foreach (Vector3 v in _modelTextureCoordinates)
                     _modelTextureCoordinates2.Add(new Vector2(v.X, v.Y));
                 return _modelTextureCoordinates2;
             }
@@ -161,9 +163,9 @@ namespace AKG.Realization.Elements
 
             return textureCoords;
         }
+
         public List<Vector3> GetNormals()
         {
-
             // Если нормалей нет, вычисляем их как усредненные нормали смежных граней
             var vertexNormals = new Dictionary<int, Vector3>();
             var vertexToFaces = new Dictionary<int, List<Vector3>>();
@@ -211,7 +213,7 @@ namespace AKG.Realization.Elements
 
             return normals;
         }
-        
+
         public void CalculateVerticesForShadowMap(int width, int height, Matrix4x4 lightViewProjectionMatrix)
         {
             var res = Parallel.For(0, _modelVertices.Count, i =>
@@ -220,20 +222,41 @@ namespace AKG.Realization.Elements
                                               ShiftX, ShiftY, ShiftZ,
                                               RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
                                           * lightViewProjectionMatrix;
-        
+
                 // 2. Преобразуем вершину и получаем Z-значение до viewport-преобразования
                 var clipPos = MatrixTransformations.Transform(_modelVertices[i], worldViewProjMatrix);
-                
+
                 float originalZ = clipPos.Z;
-        
+
                 // 5. Применяем viewport-преобразование только к X и Y
                 var viewportMatrix = MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
                 var screenPos = MatrixTransformations.Transform(clipPos, viewportMatrix);
-        
+
                 // 6. Преобразуем Z в диапазон [0,1] и сохраняем результат
-                screenPos.Z = (originalZ + 1) * 0.5f;  // Преобразование из [-1,1] в [0,1]
-        
+                screenPos.Z = (originalZ + 1) * 0.5f; // Преобразование из [-1,1] в [0,1]
+
                 _shadowVertices[i] = screenPos;
+            });
+        }
+
+        public void ReCalculateVerticesForShadowMap(int width, int height, Matrix4x4 lightViewProjectionMatrix)
+        {
+            var res = Parallel.For(0, _modelVertices.Count, i =>
+            {
+                var worldViewProjMatrix = MatrixTransformations.GetWordMatrix(
+                                              ShiftX, ShiftY, ShiftZ,
+                                              RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
+                                          * lightViewProjectionMatrix;
+
+                // 2. Преобразуем вершину и получаем Z-значение до viewport-преобразования
+                var clipPos = MatrixTransformations.Transform(_modelVertices[i], worldViewProjMatrix);
+                
+                // 6. Преобразуем Z в диапазон [0,1] и сохраняем результат
+                clipPos.Z = (clipPos.Z + 1) * 0.5f; // Преобразование из [-1,1] в [0,1]
+                clipPos.X = (clipPos.X + 1) * 0.5f;
+                clipPos.Y = (clipPos.Y + 1) * 0.5f;
+
+                _shadowVertices[i] = clipPos;
             });
         }
 
@@ -287,6 +310,7 @@ namespace AKG.Realization.Elements
                 // min = Vector3.Min(min, new Vector3(v.X, v.Y, v.Z));
                 // max = Vector3.Max(max, new Vector3(v.X, v.Y, v.Z));
             }
+
             return (min, max);
         }
     }

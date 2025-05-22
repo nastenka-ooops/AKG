@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using AKG.Realization;
 using AKG.Realization.Elements;
 using static System.Math;
 using static AKG.Realization.MatrixTransformations;
@@ -865,6 +866,11 @@ namespace AKG.Drawing
             var kuv3 = deltaY != 0 ? (uv2 / v2.W - uv1 / v1.W) / deltaY : Vector3.Zero;
             var kInvW3 = deltaY != 0 ? (1 / v2.W - 1 / v1.W) / deltaY : 0f;
 
+            // В начале метода (где другие градиенты):
+            var kwv1 = deltaY != 0 ? (wv2 - wv0) / deltaY : Vector3.Zero;
+            var kwv2 = deltaY != 0 ? (wv1 - wv0) / deltaY : Vector3.Zero;
+            var kwv3 = deltaY != 0 ? (wv2 - wv1) / deltaY : Vector3.Zero;
+            
             // Границы растеризации
             var top = Math.Max(0, (int)Math.Ceiling(v0.Y));
             var bottom = Math.Min(_buffer.height, (int)Math.Ceiling(v2.Y));
@@ -874,6 +880,7 @@ namespace AKG.Drawing
                 Vector4 av, bv;
                 Vector3 auvPersp, buvPersp;
                 float aInvW, bInvW;
+                Vector3 awv, bwv; // Добавьте это вместе с av, bv
 
                 if (y < v1.Y)
                 {
@@ -884,6 +891,8 @@ namespace AKG.Drawing
                     buvPersp = uv0 / v0.W + t * kuv2;
                     aInvW = 1 / v0.W + t * kInvW1;
                     bInvW = 1 / v0.W + t * kInvW2;
+                    awv = wv0 + t * kwv1;
+                    bwv = wv0 + t * kwv2;
                 }
                 else
                 {
@@ -894,6 +903,8 @@ namespace AKG.Drawing
                     buvPersp = uv0 / v0.W + (y - v0.Y) * kuv1;
                     aInvW = 1 / v1.W + t * kInvW3;
                     bInvW = 1 / v0.W + (y - v0.Y) * kInvW1;
+                    awv = wv1 + t * kwv3;
+                    bwv = wv0 + (y - v0.Y) * kwv1;
                 }
 
                 if (av.X > bv.X)
@@ -901,6 +912,7 @@ namespace AKG.Drawing
                     (av, bv) = (bv, av);
                     (auvPersp, buvPersp) = (buvPersp, auvPersp);
                     (aInvW, bInvW) = (bInvW, aInvW);
+                    (awv, bwv) = (bwv, awv); // Не забудьте поменять местами!
                 }
 
                 var left = Math.Max(0, (int)Math.Ceiling(av.X));
@@ -926,10 +938,13 @@ namespace AKG.Drawing
                     // Преобразование нормали
                     normal = Vector3.Normalize(normal * 2 - Vector3.One);
 
+                    //вот тут возможно что-то не то
+                    var worldPos = wv0 * (1-t) + wv1 * t + wv2 * t; // Пример интерполяции
                     // Расчет освещения
                     var Ka = new Vector3(texColor.B / 255f, texColor.G / 255f, texColor.R / 255f);
                     var color = CalculatePhongColorWithShadow2(
-                        new Vector4(x, y, z, 1), // Используем корректное значение z
+                        
+                        new Vector4(worldPos.X, worldPos.Y, worldPos.Z, 1), // Используем корректное значение z
                         normal, model.lightDir, model.target,
                         Ka, Ka, new Vector3(specular), model.Shininess, 
                         model.lightColor,

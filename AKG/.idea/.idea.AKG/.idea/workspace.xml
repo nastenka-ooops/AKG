@@ -7,53 +7,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd0a393e-b8c6-4340-bc02-58324722a279" name="Changes" comment="fix previous shit">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.AssemblyInfoInputs.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.assets.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.csproj.CoreCompileInputs.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.csproj.GenerateResource.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.genruntimeconfig.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG1.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG1.pdb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG2.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/AKG3.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/apphost.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/project.nuget.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44_[Changes]/tmp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/shelf/Uncommitted_changes_before_Update_at_14_05_2025_13_44__Changes_.xml" beforeDir="false" />
+    <list default="true" id="dd0a393e-b8c6-4340-bc02-58324722a279" name="Changes" comment="pizdets nahui blyat">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawing/Painter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/Painter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawing/ShadowMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/ShadowMap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Models/shadow-maps/shadow.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Realization/Elements/Model.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Realization/Elements/Model.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/shadow.png" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/shadow.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net8.0-windows/tmp.png" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net8.0-windows/tmp.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/AKG.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AKG.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/AKG.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/AKG.csproj.nuget.g.props" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.CoreCompileInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.CoreCompileInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.GenerateResource.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.csproj.GenerateResource.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.genruntimeconfig.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.pdb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/AKG.sourcelink.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/apphost.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/ref/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/ref/AKG.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net8.0-windows/refint/AKG.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net8.0-windows/refint/AKG.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +147,7 @@
       <workItem from="1745231844248" duration="19301000" />
       <workItem from="1746646735673" duration="48000" />
       <workItem from="1747219461343" duration="12538000" />
-      <workItem from="1747817389785" duration="17585000" />
+      <workItem from="1747817389785" duration="23190000" />
     </task>
     <task id="LOCAL-00001" summary="refactoring">
       <option name="closed" value="true" />
@@ -242,7 +213,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747819488243</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="pizdets nahui blyat">
+      <option name="closed" value="true" />
+      <created>1747940390828</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1747940390828</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -283,7 +262,8 @@
     <MESSAGE value="some shit" />
     <MESSAGE value="i forgot about this shit" />
     <MESSAGE value="fix previous shit" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix previous shit" />
+    <MESSAGE value="pizdets nahui blyat" />
+    <option name="LAST_COMMIT_MESSAGE" value="pizdets nahui blyat" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -348,16 +328,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Drawing/ShadowMap.cs</url>
-          <line>138</line>
+          <line>142</line>
           <properties documentPath="C:\BSUIR\AKGv2\AKG\Drawing\ShadowMap.cs" containingFunctionPresentation="Method 'GetShadowFactor'">
             <startOffsets>
-              <option value="4181" />
+              <option value="4443" />
             </startOffsets>
             <endOffsets>
-              <option value="4214" />
+              <option value="4483" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="55" />
+          <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

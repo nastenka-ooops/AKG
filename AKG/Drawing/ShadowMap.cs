@@ -135,22 +135,21 @@ public class ShadowMap
     public float GetShadowFactor(Vector4 worldPosition)
     {
         // Преобразуем мировые координаты в пространство света
-        Vector4 lightSpacePos = worldPosition;
-        lightSpacePos /= lightSpacePos.W;
+        Vector4 lightSpacePos = MatrixTransformations.Transform(worldPosition, LightViewProjectionMatrix);
         
-        // // Преобразуем в UV координаты [0,1]
-        // float u = lightSpacePos.X * 0.5f + 0.5f;
-        // float v = lightSpacePos.Y * 0.5f + 0.5f;
-        //
-        // // Проверяем, находится ли точка в пределах shadow map
-        // if (u < 0 || u > 1 || v < 0 || v > 1)
-        //     return 1.0f;
-        //
+        // Преобразуем в UV координаты [0,1]
+        float u = lightSpacePos.X * 0.5f + 0.5f;
+        float v = lightSpacePos.Y * 0.5f + 0.5f;
+        
+        // Проверяем, находится ли точка в пределах shadow map
+        if (u < 0 || u > 1 || v < 0 || v > 1)
+            return 1.0f;
+        
         // Получаем глубину из shadow map
-        float shadowDepth = Sample(lightSpacePos.X, lightSpacePos.Y);
+        float shadowDepth = Sample(u, v);
         
         // Сравниваем глубины (добавляем bias для борьбы с артефактами)
         float bias = 0.001f;
-        return (lightSpacePos.Z <= shadowDepth + bias) ? 1.0f : 0.2f;
+        return shadowDepth + bias;
     }
 }
