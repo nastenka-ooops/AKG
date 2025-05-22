@@ -214,68 +214,29 @@ namespace AKG.Realization.Elements
         
         public void CalculateVerticesForShadowMap(int width, int height, Matrix4x4 lightViewProjectionMatrix)
         {
-            float aspect = width / (float)height;
-    
             var res = Parallel.For(0, _modelVertices.Count, i =>
             {
-                // Только мировые преобразования + преобразования источника света
-                var matrix = MatrixTransformations.GetWordMatrix(ShiftX, ShiftY, ShiftZ,
-                                 RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
-                             * lightViewProjectionMatrix
-                             * MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
+                var worldViewProjMatrix = MatrixTransformations.GetWordMatrix(
+                                              ShiftX, ShiftY, ShiftZ,
+                                              RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
+                                          * lightViewProjectionMatrix;
+        
+                // 2. Преобразуем вершину и получаем Z-значение до viewport-преобразования
+                var clipPos = MatrixTransformations.Transform(_modelVertices[i], worldViewProjMatrix);
                 
-                _shadowVertices[i] = MatrixTransformations.Transform(_modelVertices[i], matrix);
+                float originalZ = clipPos.Z;
+        
+                // 5. Применяем viewport-преобразование только к X и Y
+                var viewportMatrix = MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
+                var screenPos = MatrixTransformations.Transform(clipPos, viewportMatrix);
+        
+                // 6. Преобразуем Z в диапазон [0,1] и сохраняем результат
+                screenPos.Z = (originalZ + 1) * 0.5f;  // Преобразование из [-1,1] в [0,1]
+        
+                _shadowVertices[i] = screenPos;
             });
         }
 
-        //public Matrix4x4 GetLightViewProjectionMatrix(int shadowMapWidth, int shadowMapHeight)
-        //{
-        //    // Направление света уже есть в lightDir
-        //    // Вычисляем позицию источника света (немного выше сцены)
-        //    Vector3 lightPos = eye - lightDir * 10; // 10 - произвольное расстояние
-
-        //    // Вычисляем bounding box модели для определения размера ортографической проекции
-        //    float minX = float.MaxValue, maxX = float.MinValue;
-        //    float minY = float.MaxValue, maxY = float.MinValue;
-        //    float minZ = float.MaxValue, maxZ = float.MinValue;
-
-        //    foreach (var vertex in _worldVertices)
-        //    {
-        //        minX = Math.Min(minX, vertex.X);
-        //        maxX = Math.Max(maxX, vertex.X);
-        //        minY = Math.Min(minY, vertex.Y);
-        //        maxY = Math.Max(maxY, vertex.Y);
-        //        minZ = Math.Min(minZ, vertex.Z);
-        //        maxZ = Math.Max(maxZ, vertex.Z);
-        //    }
-
-
-        //    float sceneSize = Math.Max(maxX - minX, Math.Max(maxY - minY, maxZ - minZ));
-
-        //    Vector3 sceneCenter = new Vector3(
-        //        (minX + maxX) * 0.5f,
-        //        (minY + maxY) * 0.5f,
-        //        (minZ + maxZ) * 0.5f);
-
-        //    //Vector3 lightPos = sceneCenter - Vector3.Normalize(lightDir) * sceneSize * 2;
-
-        //    Matrix4x4 lightView = Matrix4x4.CreateLookAt(
-        //        lightPos,
-        //        lightPos + lightDir,
-        //        Vector3.UnitY);
-        //    //Matrix4x4 lightView = Matrix4x4.CreateLookAt(
-        //    //    lightPos,
-        //    //    sceneCenter,  // Смотрим на центр сцены
-        //    //    Vector3.UnitY);
-        //    // Ортографическая проекция для направленного света
-        //    Matrix4x4 lightProjection = Matrix4x4.CreateOrthographic(
-        //        sceneSize * 2,
-        //        sceneSize * 2,
-        //        0.1f,
-        //        sceneSize * 4);
-
-        //    return lightView * lightProjection;
-        //}
         public Matrix4x4 GetLightViewProjectionMatrix(int shadowMapWidth, int shadowMapHeight)
         {
             // A. Вычисляем AABB сцены
@@ -303,12 +264,12 @@ namespace AKG.Realization.Elements
                 lightUp);
 
             // G. Ортографическая проекция
-            var size = sceneRadius * 2.5f;
+            var size = sceneRadius * 2.0f;
             var lightProjection = Matrix4x4.CreateOrthographic(
                 size,
                 size,
                 0.1f,
-                size * 4);
+                size * 3);
 
             return lightView * lightProjection;
         }
@@ -320,13 +281,12 @@ namespace AKG.Realization.Elements
 
             foreach (var v in _worldVertices)
             {
-                //Vector3 scaledPos = new Vector3(v.X, v.Y, v.Z) * Scale;
-                //min = Vector3.Min(min, scaledPos);
-                //max = Vector3.Max(max, scaledPos);
-                min = Vector3.Min(min, new Vector3(v.X, v.Y, v.Z));
-                max = Vector3.Max(max, new Vector3(v.X, v.Y, v.Z));
+                Vector3 scaledPos = new Vector3(v.X, v.Y, v.Z) * Scale;
+                min = Vector3.Min(min, scaledPos);
+                max = Vector3.Max(max, scaledPos);
+                // min = Vector3.Min(min, new Vector3(v.X, v.Y, v.Z));
+                // max = Vector3.Max(max, new Vector3(v.X, v.Y, v.Z));
             }
-
             return (min, max);
         }
     }

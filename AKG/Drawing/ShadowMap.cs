@@ -1,4 +1,5 @@
 using System.Numerics;
+using AKG.Realization;
 using AKG.Realization.Elements;
 
 namespace AKG.Drawing;
@@ -21,7 +22,7 @@ public class ShadowMap
 
     public void ClearDepthBuffer()
     {
-        Array.Fill(_depthBuffer, float.MaxValue);
+        Array.Fill(_depthBuffer, 1);
     }
 
     public void RenderDepthMap(Model model)
@@ -134,19 +135,19 @@ public class ShadowMap
     public float GetShadowFactor(Vector4 worldPosition)
     {
         // Преобразуем мировые координаты в пространство света
-        Vector4 lightSpacePos = Vector4.Transform(worldPosition, LightViewProjectionMatrix);
+        Vector4 lightSpacePos = worldPosition;
         lightSpacePos /= lightSpacePos.W;
         
-        // Преобразуем в UV координаты [0,1]
-        float u = lightSpacePos.X * 0.5f + 0.5f;
-        float v = lightSpacePos.Y * 0.5f + 0.5f;
-        
-        // Проверяем, находится ли точка в пределах shadow map
-        if (u < 0 || u > 1 || v < 0 || v > 1)
-            return 1.0f;
-        
+        // // Преобразуем в UV координаты [0,1]
+        // float u = lightSpacePos.X * 0.5f + 0.5f;
+        // float v = lightSpacePos.Y * 0.5f + 0.5f;
+        //
+        // // Проверяем, находится ли точка в пределах shadow map
+        // if (u < 0 || u > 1 || v < 0 || v > 1)
+        //     return 1.0f;
+        //
         // Получаем глубину из shadow map
-        float shadowDepth = Sample(u, v);
+        float shadowDepth = Sample(lightSpacePos.X, lightSpacePos.Y);
         
         // Сравниваем глубины (добавляем bias для борьбы с артефактами)
         float bias = 0.001f;

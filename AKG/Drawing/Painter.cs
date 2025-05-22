@@ -773,6 +773,7 @@ namespace AKG.Drawing
             // 2. Основной рендеринг (второй проход)
             RenderMainPass(model);
 
+            SaveToFile();
             _shadowMap.ClearDepthBuffer();
 
             _buffer.Flush();
@@ -781,9 +782,6 @@ namespace AKG.Drawing
         private void RenderShadowMapPass(Model model)
         {
             _shadowMap.RenderDepthMap(model);
-            SaveToFile();
-            /*// Очищаем shadow map
-            _shadowMap.ClearDepthBuffer();*/
         }
 
         private void RenderMainPass(Model model)
@@ -1078,8 +1076,8 @@ namespace AKG.Drawing
             Bitmap bitmap = new Bitmap(width, height);
 
             // Найдём min и max глубины, чтобы нормализовать
-            float min = float.MaxValue;
-            float max = float.MinValue;
+            float min = 0;
+            float max = 1;
 
             foreach (float d in _shadowMap._depthBuffer)
             {
@@ -1096,16 +1094,8 @@ namespace AKG.Drawing
                 {
                     int index = y * width + x;
                     float depth = _shadowMap._depthBuffer[index];
-
-                    // Нормализуем значение в диапазон [0, 255]
-                    byte intensity = 0;
-                    if (!float.IsInfinity(depth) && !float.IsNaN(depth))
-                    {
-                        float norm = (depth - min) / range;
-                        intensity = (byte)(255 - (norm * 255)); // инвертированная яркость: ближе → светлее
-                    }
-
-                    Color color = Color.FromArgb(intensity, intensity, intensity);
+                    
+                    Color color = Color.FromArgb((int)(255 * depth), (int)(255 * depth), (int)(255 * depth));
                     bitmap.SetPixel(x, y, color);
                 }
             }
