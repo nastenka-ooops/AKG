@@ -258,7 +258,7 @@ namespace AKG.Realization.Elements
 
         public Matrix4x4 GetLightViewProjectionMatrix()
         {
-            float orthoSize = 1.0f;
+            float orthoSize = 5.0f;
             Matrix4x4 lightProjection = Matrix4x4.CreateOrthographicOffCenter(
                 -orthoSize, orthoSize, 
                 -orthoSize, orthoSize, 
@@ -266,7 +266,7 @@ namespace AKG.Realization.Elements
     
             // Light view matrix
             Matrix4x4 lightView = Matrix4x4.CreateLookAt(
-                target - lightDir * 10,    // Light position (directional light treats this as direction)
+                target - lightDir,    // Light position (directional light treats this as direction)
                 target,       // Target
                 up);         // Up vector
     

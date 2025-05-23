@@ -793,13 +793,22 @@ namespace AKG.Drawing
             var worldVertices = model.GetWorldVertices();
             var textureCoordinates = model.GetModelTextureCoordinates();
 
+            Matrix4x4 lightView = Matrix4x4.CreateLookAt(
+                -model.lightDir * 10,  // Позиция света (направленный свет)
+                Vector3.Zero,          // Цель
+                Vector3.UnitY);        // Вверх
+
+            Matrix4x4 lightProjection = Matrix4x4.CreateOrthographicOffCenter(
+                -15, 15, -15, 15, 0.1f, 50);
+
+            Matrix4x4 depthMVP = lightView * lightProjection;
             Matrix4x4 biasMatrix = new Matrix4x4(
                 0.5f, 0.0f, 0.0f, 0.0f,
                 0.0f, 0.5f, 0.0f, 0.0f,
                 0.0f, 0.0f, 0.5f, 0.0f,
                 0.5f, 0.5f, 0.5f, 1.0f);
-            Matrix4x4 depthBiasMVP = biasMatrix * _shadowMap.LightViewProjectionMatrix;
-
+            
+            Matrix4x4 depthBiasMVP = biasMatrix * depthMVP;
 
             // Рендерим все треугольники с учетом теней
             foreach (var face in model.GetModelFaces())
@@ -819,10 +828,17 @@ namespace AKG.Drawing
                 var uv2 = textureCoordinates[face.Indices[2].TextureIndex - 1];
 
                 // Вычисляем ShadowCoord для каждой вершины
-                Vector4 shadowCoord0 = Vector4.Transform(wv0 with { W = 1.0f }, depthBiasMVP);
-                Vector4 shadowCoord1 = Vector4.Transform(wv1 with { W = 1.0f }, depthBiasMVP);
-                Vector4 shadowCoord2 = Vector4.Transform(wv2 with { W = 1.0f }, depthBiasMVP);
+                Vector4 shadowCoord0 = Vector4.Transform(wv0 with { W = 1 },depthMVP );
+                shadowCoord0 = Vector4.Transform(shadowCoord0, biasMatrix);
+                
+                Vector4 shadowCoord1 = Vector4.Transform(wv1 with { W = 1.0f }, depthMVP );
+                shadowCoord1 = Vector4.Transform(shadowCoord1, biasMatrix);
+                
+                Vector4 shadowCoord2 = Vector4.Transform(wv2 with { W = 1.0f }, depthMVP );
+                shadowCoord2 = Vector4.Transform(shadowCoord2, biasMatrix);
 
+                Console.WriteLine(shadowCoord2);
+                
                 // Рисуем треугольник с учетом теней
                 DrawTexturedTriangleWithShadows(
                     new Vector4(v0.X, v0.Y, wv0.Z, v0.W),
@@ -982,15 +998,16 @@ namespace AKG.Drawing
                         // Получаем глубину из shadow map
                         int shadowX = (int)(projCoords.X * (_shadowMap._width - 1));
                         int shadowY = (int)(projCoords.Y * (_shadowMap._height - 1));
-                        float closestDepth = _shadowMap.GetDepth(shadowX, shadowY);
-
+                        float closestDepth = _shadowMap.GetShadowFactor(new Vector4(worldPos.X, worldPos.Y, worldPos.Z, 1));
+                        
                         // Сравниваем глубины с bias
                         const float bias = 0.001f;
                         shadowFactor = (projCoords.Z - bias <= closestDepth) 
-                            ? 1.0f 
-                            : 0.5f;
+                            ? 1f 
+                            : 0.7f;
                     }
-
+                    normal = Vector3.Normalize(Vector3.Cross(wv2 - wv0, wv1 - wv0));
+                    
                     var color = CalculatePhongColorWithShadow2(
                         new Vector4(worldPos.X, worldPos.Y, worldPos.Z, 1), // Используем корректное значение z
                         normal, model.lightDir, model.target,
@@ -1034,26 +1051,8 @@ namespace AKG.Drawing
 
             // Цвет из текстуры или белый по умолчанию
             Vector3 baseColor = Vector3.One;
-            if (diffuseMap != null)
-            {
-                Color texColor = GetTextureColor(diffuseMap, uv.X, uv.Y);
-                baseColor = new Vector3(texColor.B, texColor.G, texColor.R) / 255.0f;
-            }
 
-            // Коррекция нормали с помощью normal map (если есть)
-            if (normalMap != null)
-            {
-                Vector3 texNormal = GetNormalFromMap(normalMap, uv.X, uv.Y);
-                texNormal = Vector3.Normalize(texNormal * 2 - Vector3.One); // [0,1] -> [-1,1]
-                normal = Vector3.Normalize(normal + texNormal);
-            }
-
-            // Интенсивность зеркального отражения из specular map (если есть)
             float specularIntensity = 1.0f;
-            if (specularMap != null)
-            {
-                specularIntensity = GetSpecularIntensity(specularMap, uv.X, uv.Y);
-            }
 
             // Фоновое освещение (не зависит от теней)
             Vector3 ambient = Ka * lightColor * baseColor;
@@ -1066,67 +1065,17 @@ namespace AKG.Drawing
             Vector3 reflectDir = Vector3.Reflect(-lightDir, normal);
             float spec = (float)Math.Pow(Math.Max(Vector3.Dot(viewDir, reflectDir), 0), shininess);
             Vector3 specular = Ks * spec * lightColor * shadowFactor * specularIntensity;
-
+            
             // Суммируем компоненты
             Vector3 finalColor = ambient + diffuse + specular;
-            finalColor = Vector3.Clamp(finalColor, Vector3.Zero, Vector3.One);
 
+            finalColor = Vector3.Clamp(finalColor, Vector3.Zero, Vector3.One);
+            
             // Преобразуем в Color с учетом настроек R,G,B
             return Color.FromArgb(
-                (int)(finalColor.X * B),
-                (int)(finalColor.Y * G),
-                (int)(finalColor.Z * R));
-        }
-
-        private Color CalculatePixelColorWithShadows(
-            Vector3 worldPos, Vector3 normal, Vector2 uv, Model model)
-        {
-            // Получаем shadow factor
-            float shadowFactor = _shadowMap.GetShadowFactor(new Vector4(worldPos, 1.0f));
-
-            // Получаем цвет из диффузной текстуры
-            Color texColor = GetTextureColor(model.DiffuseMap, uv.X, uv.Y);
-
-            // Получаем нормаль из normal map (если есть)
-            if (model.NormalMap != null)
-            {
-                Vector3 texNormal = GetNormalFromMap(model.NormalMap, uv.X, uv.Y);
-                // Преобразуем нормаль из [0,1] в [-1,1]
-                texNormal = Vector3.Normalize(texNormal * 2 - Vector3.One);
-                normal = Vector3.Normalize(normal + texNormal);
-            }
-
-            // Получаем зеркальность из specular map (если есть)
-            float specularIntensity = 1.0f;
-            if (model.SpecularMap != null)
-            {
-                specularIntensity = GetSpecularIntensity(model.SpecularMap, uv.X, uv.Y);
-            }
-
-            // Векторы для освещения
-            Vector3 lightDir = Vector3.Normalize(-model.lightDir);
-            Vector3 viewDir = Vector3.Normalize(model.eye - worldPos);
-
-            // Ambient
-            Vector3 ambient = model.Ka * new Vector3(texColor.B, texColor.G, texColor.R) / 255.0f;
-
-            // Diffuse
-            float diff = Math.Max(Vector3.Dot(normal, lightDir), 0);
-            Vector3 diffuse = model.Kd * diff * model.lightColor * shadowFactor;
-
-            // Specular
-            Vector3 reflectDir = Vector3.Reflect(-lightDir, normal);
-            float spec = (float)Math.Pow(Math.Max(Vector3.Dot(viewDir, reflectDir), model.Shininess), 2);
-            Vector3 specular = model.Ks * spec * model.lightColor * shadowFactor * specularIntensity;
-
-            // Итоговый цвет
-            Vector3 result = ambient + diffuse + specular;
-            result = Vector3.Clamp(result, Vector3.Zero, Vector3.One);
-
-            return Color.FromArgb(
-                (int)(result.X * B),
-                (int)(result.Y * G),
-                (int)(result.Z * R));
+                (int)(255 - (finalColor.X * B)),
+                (int)(255 - (finalColor.Y * R)),
+                (int)(255 - (finalColor.Z * G)));
         }
 
         private void SaveToFile()
