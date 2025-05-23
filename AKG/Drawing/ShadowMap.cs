@@ -28,12 +28,13 @@ public class ShadowMap
     public void RenderDepthMap(Model model)
     {
         // 1. Получаем матрицу вида-проекции для источника света
-        LightViewProjectionMatrix = model.GetLightViewProjectionMatrix(_width, _height);
+        LightViewProjectionMatrix = model.GetLightViewProjectionMatrix();
         
         // 2. Рассчитываем вершины с точки зрения источника света
         model.CalculateVerticesForShadowMap(_width, _height, LightViewProjectionMatrix);
 
         var shadowVertices = model.GetShadowVertices();
+
         // 3. Рендерим глубину в буфер
         foreach (var face in model.GetModelFaces())
         {
@@ -118,6 +119,12 @@ public class ShadowMap
             _depthBuffer[index] = depth;
         }
     }
+
+    public float GetDepth(int x, int y)
+    {
+        return _depthBuffer[y * _width + x];
+    }
+    
 
     public float Sample(float u, float v)
     {

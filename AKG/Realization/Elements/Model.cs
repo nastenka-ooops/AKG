@@ -39,17 +39,17 @@ namespace AKG.Realization.Elements
 
         public Vector3 lightColor { get; set; } = new Vector3(0.9f, 0.9f, 0.9f);
 
-        public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/nothing.jpg");
+        //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/nothing.jpg");
 
-        //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
+        public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/bricks.jpg");
         //public Bitmap DiffuseMap { get; set; } = new Bitmap("../../../Models/diffuse-maps/craneo.jpg");
-        public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/nothing.jpg");
+        //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/nothing.jpg");
 
-        //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
+        public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/bricks.png");
         //public Bitmap NormalMap { get; set; } = new Bitmap("../../../Models/normal-maps/craneo.jpg");
-        public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/nothing.jpg");
+        //public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/nothing.jpg");
 
-        //public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
+        public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/bricks.jpg");
         // public Bitmap SpecularMap { get; set; } = new Bitmap("../../../Models/specular-maps/craneo.jpg");
         public void setDefaultMaterial()
         {
@@ -218,24 +218,20 @@ namespace AKG.Realization.Elements
         {
             var res = Parallel.For(0, _modelVertices.Count, i =>
             {
-                var worldViewProjMatrix = MatrixTransformations.GetWordMatrix(
-                                              ShiftX, ShiftY, ShiftZ,
-                                              RotationOfXInRadians, RotationOfYInRadians, RotationOfZInRadians, Scale)
-                                          * lightViewProjectionMatrix;
+                var clipPos = Vector4.Transform(_worldVertices[i], lightViewProjectionMatrix);
 
-                // 2. Преобразуем вершину и получаем Z-значение до viewport-преобразования
-                var clipPos = MatrixTransformations.Transform(_modelVertices[i], worldViewProjMatrix);
-
-                float originalZ = clipPos.Z;
-
-                // 5. Применяем viewport-преобразование только к X и Y
-                var viewportMatrix = MatrixTransformations.GetViewportMatrix(width, height, 0, 0);
-                var screenPos = MatrixTransformations.Transform(clipPos, viewportMatrix);
-
-                // 6. Преобразуем Z в диапазон [0,1] и сохраняем результат
-                screenPos.Z = (originalZ + 1) * 0.5f; // Преобразование из [-1,1] в [0,1]
-
-                _shadowVertices[i] = screenPos;
+                Vector3 ndc = new Vector3(
+                    clipPos.X / clipPos.W,
+                    clipPos.Y / clipPos.W,
+                    clipPos.Z / clipPos.W);
+                
+                var screenPos = new Vector2(
+                    (ndc.X + 1.0f) * 0.5f * width,
+                    (1.0f - ndc.Y) * 0.5f * height);
+                
+                var depth = ndc.Z;
+                
+                _shadowVertices[i] = new Vector4(screenPos.X, screenPos.Y, depth, 1.0f);
             });
         }
 
@@ -260,58 +256,40 @@ namespace AKG.Realization.Elements
             });
         }
 
-        public Matrix4x4 GetLightViewProjectionMatrix(int shadowMapWidth, int shadowMapHeight)
+        public Matrix4x4 GetLightViewProjectionMatrix()
         {
-            // A. Вычисляем AABB сцены
-            var (min, max) = CalculateSceneBounds();
-
-            // B. Центр сцены
-            Vector3 sceneCenter = (min + max) * 0.5f;
-
-            // C. Направление света (обязательно нормализовать!)
-            Vector3 lightDirection = Vector3.Normalize(lightDir);
-
-            // D. Позиция источника света
-            float sceneRadius = (max - min).Length() * 0.5f;
-            Vector3 lightPos = sceneCenter - lightDirection * (sceneRadius * 2);
-
-            // E. Вычисляем Up-вектор
-            Vector3 lightUp = Math.Abs(Vector3.Dot(lightDirection, Vector3.UnitY)) > 0.95f
-                ? Vector3.UnitZ
-                : Vector3.UnitY;
-
-            // F. Матрица вида
-            var lightView = Matrix4x4.CreateLookAt(
-                lightPos,
-                sceneCenter,
-                lightUp);
-
-            // G. Ортографическая проекция
-            var size = sceneRadius * 2.0f;
-            var lightProjection = Matrix4x4.CreateOrthographic(
-                size,
-                size,
-                0.1f,
-                size * 3);
-
+            float orthoSize = 1.0f;
+            Matrix4x4 lightProjection = Matrix4x4.CreateOrthographicOffCenter(
+                -orthoSize, orthoSize, 
+                -orthoSize, orthoSize, 
+                -10.0f, 20.0f);
+    
+            // Light view matrix
+            Matrix4x4 lightView = Matrix4x4.CreateLookAt(
+                target - lightDir * 10,    // Light position (directional light treats this as direction)
+                target,       // Target
+                up);         // Up vector
+    
+            // Combine view and projection
             return lightView * lightProjection;
         }
 
-        private (Vector3 min, Vector3 max) CalculateSceneBounds()
+        private float CalculateSceneBoundingSphereRadius()
         {
-            Vector3 min = new Vector3(float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue);
-
-            foreach (var v in _worldVertices)
+            // Простейшая реализация - находим максимальное расстояние от центра сцены
+            // В реальном приложении нужно учитывать все объекты сцены
+    
+            float maxDistance = 0;
+            Vector3 center = Vector3.Zero; // Предполагаем центр сцены в (0,0,0)
+    
+            foreach (var vertex in _worldVertices)
             {
-                Vector3 scaledPos = new Vector3(v.X, v.Y, v.Z) * Scale;
-                min = Vector3.Min(min, scaledPos);
-                max = Vector3.Max(max, scaledPos);
-                // min = Vector3.Min(min, new Vector3(v.X, v.Y, v.Z));
-                // max = Vector3.Max(max, new Vector3(v.X, v.Y, v.Z));
+                float dist = Vector3.Distance(center, new Vector3(vertex.X, vertex.Y, vertex.Z));
+                if (dist > maxDistance)
+                    maxDistance = dist;
             }
-
-            return (min, max);
+    
+            return maxDistance;
         }
     }
 }

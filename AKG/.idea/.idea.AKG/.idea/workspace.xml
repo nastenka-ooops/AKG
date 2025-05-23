@@ -7,7 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd0a393e-b8c6-4340-bc02-58324722a279" name="Changes" comment="pizdets nahui blyat">
+    <list default="true" id="dd0a393e-b8c6-4340-bc02-58324722a279" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AKG/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawing/Painter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/Painter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Drawing/ShadowMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Drawing/ShadowMap.cs" afterDir="false" />
@@ -57,6 +57,9 @@
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/BSUIR/AKGv2/AKG/Drawing/ShadowMap.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/BSUIR/AKGv2/AKG/obj/Debug/net8.0-windows/AKG.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/BSUIR/AKGv2/AKG/obj/Debug/net8.0-windows/AKG.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1f2f0b08d2574f1aa35973d1cd0ae347cef920/17/9606b5a0/Control.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/1f2f0b08d2574f1aa35973d1cd0ae347cef920/b6/b9864440/NativeWindow.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/211e6f3b24fa438a92f1815153647ce2c8f908/8e/00790cc9/Vector3.cs" root0="FORCE_HIGHLIGHTING" />
@@ -92,20 +95,21 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.AKG.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.AKG.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Admin/Downloads/ShadowMapping-master/ShadowMapping-master/ShadowMapping",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="AKG" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="$PROJECT_DIR$/bin/Debug/net8.0-windows/AKG.dll" />
@@ -299,45 +303,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Drawing/ShadowMap.cs</url>
-          <line>35</line>
-          <properties documentPath="C:\BSUIR\AKGv2\AKG\Drawing\ShadowMap.cs" containingFunctionPresentation="Method 'RenderDepthMap'">
-            <startOffsets>
-              <option value="957" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1004" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="39" />
-        </line-breakpoint>
-        <line-breakpoint type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Drawing/ShadowMap.cs</url>
-          <line>71</line>
-          <properties documentPath="C:\BSUIR\AKGv2\AKG\Drawing\ShadowMap.cs" containingFunctionPresentation="Method 'RenderTriangle'">
-            <startOffsets>
-              <option value="2323" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2357" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Drawing/ShadowMap.cs</url>
-          <line>142</line>
-          <properties documentPath="C:\BSUIR\AKGv2\AKG\Drawing\ShadowMap.cs" containingFunctionPresentation="Method 'GetShadowFactor'">
-            <startOffsets>
-              <option value="4443" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4483" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="73" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
